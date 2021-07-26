@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
     "noImplicitAny": true,
     "sourceMap": true,
-    "module": "esnext",
-    "target": "es5",
-    "allowJs": true,
-    "moduleResolution": "node"
-  }
+    "allowJs": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

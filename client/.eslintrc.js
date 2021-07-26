@@ -20,5 +20,6 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { singleQuote: true }],
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
