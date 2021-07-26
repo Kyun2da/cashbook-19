@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "noImplicitAny": true,
     "sourceMap": true,
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+			"@/*": ["src/*"],
+		}
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
