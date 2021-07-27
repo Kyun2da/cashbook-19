@@ -1,5 +1,5 @@
 import type { Observer } from '@/lib/observer';
-import type Router from '@/router';
+import type Router from '@/lib/router';
 
 export default class Header implements Observer {
   private router: Router;

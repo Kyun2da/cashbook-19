@@ -1,11 +1,21 @@
 import Subject from './subject';
 
 class State extends Subject {
-  private state: Record<string, any>;
+  private state: StoreState;
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      router: {
+        pathname: '',
+        search: '',
+        hash: '',
+      },
+      login: null,
+      categories: [],
+      payments: [],
+      records: [],
+    };
   }
 
   // Update the state.
@@ -16,7 +26,7 @@ class State extends Subject {
   }
 
   // Get the state.
-  get(): Record<string, any> {
+  get(): StoreState {
     return this.state;
   }
 }
