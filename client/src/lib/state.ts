@@ -1,4 +1,4 @@
-import Subject from './Subject';
+import Subject from './subject';
 
 class State extends Subject {
   private state: Record<string, any>;

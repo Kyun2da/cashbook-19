@@ -8,6 +8,7 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
     hot: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -36,7 +37,7 @@ module.exports = merge(common, {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: 'src/index.html',
       templateParameters: {
         env: '(개발용)',
       },
