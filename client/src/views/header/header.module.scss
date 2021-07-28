@@ -2,36 +2,37 @@
 
 .header {
   width: 100%;
-  height: 160px;
+  height: 13rem;
   display: flex;
-  background-color: $primary;
+  background-color: $primary1;
   color: $off-white;
   justify-content: space-between;
   font-family: 'Do Hyeon', sans-serif;
   align-items: center;
-  padding: 20px 16vw;
+  padding: 0rem 10rem;
+  padding-bottom: 3rem;
 }
 
 .title {
-  width: 200px;
-  font-size: 40px;
+  width: 15rem;
+  font-size: 3rem;
 }
 
 .date {
-  width: 200px;
+  width: 15rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .year {
-  font-size: 28px;
+  font-size: 3rem;
   text-align: center;
 }
 
 .month {
-  font-size: 48px;
-  margin-bottom: 12px;
+  font-size: 4rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -40,17 +41,17 @@
   color: white;
   background-color: transparent;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 2rem;
 }
 
 .menu {
-  width: 200px;
-  font-size: 24px;
+  width: 15rem;
+  font-size: 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 
   a {
-    margin-left: 16px;
+    margin-left: 1rem;
     color: white;
   }
 }
