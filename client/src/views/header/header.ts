@@ -1,5 +1,5 @@
-import type { Observer } from '@/lib/observer';
-import type Router from '@/lib/router';
+import type { Observer } from '@/core/ui/observer';
+import type Router from '@/core/utils/router';
 import './header.scss';
 
 export default class Header implements Observer {

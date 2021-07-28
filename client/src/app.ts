@@ -2,8 +2,8 @@ import '@/core/styles/reset.css';
 import '@/core/styles/global.scss';
 import '@/assets/fonts/woowahan-cashbook-icons.css';
 
-import State from '@/lib/state';
-import Router from '@/lib/router';
+import State from '@/core/ui/state';
+import Router from '@/core/utils/router';
 
 import Header from '@/views/header';
 import Main from '@/views/main';

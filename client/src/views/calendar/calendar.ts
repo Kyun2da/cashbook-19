@@ -1,4 +1,4 @@
-import type { Observer } from '@/lib/observer';
+import type { Observer } from '@/core/ui/observer';
 
 export default class Calendar implements Observer {
   template(state: StoreState): string {
