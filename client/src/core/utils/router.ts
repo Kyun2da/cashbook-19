@@ -1,4 +1,4 @@
-import State from '@/lib/state';
+import State from '@/core/ui/state';
 
 interface To {
   pathname?: string;
