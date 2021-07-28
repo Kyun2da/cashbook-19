@@ -1,5 +1,6 @@
 import '@/core/styles/reset.css';
 import '@/core/styles/global.scss';
+import '@/assets/fonts/woowahan-cashbook-icons.css';
 
 import State from '@/lib/state';
 import Router from '@/lib/router';

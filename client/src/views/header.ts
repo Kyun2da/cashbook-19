@@ -15,9 +15,9 @@ export default class Header implements Observer {
     return `
       <div>HEADER ${state.router.pathname}</div>
       <ul>
-        <li><a href="/a">/a로 이동</a></li>
-        <li><a href="/b">/b로 이동</a></li>
-        <li><a href="/c">/c로 이동</a></li>
+        <li><a href="/a">/a로 이동 <i class="wci-calendar"></i></a></li>
+        <li><a href="/b">/b로 이동 <i class="wci-chart"></i></a></li>
+        <li><a href="/c">/c로 이동 <i class="wci-file-text"></i></a></li>
       </ul>
     `;
   }
