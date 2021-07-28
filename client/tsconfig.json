@@ -4,6 +4,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "allowJs": true,
+    "lib": ["dom", "ES2019"],
     "paths": {
 			"@/*": ["src/*"],
 		},
