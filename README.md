@@ -4,7 +4,7 @@
 
 이번 프로젝트는 가게부를 만드는 프로젝트입니다.
 
-## 팀 워키
+## 팀 위키
 
 [팀 위키](https://github.com/woowa-techcamp-2021/cashbook-19/wiki)로 가서 우리의 문서를 보세요!
 
