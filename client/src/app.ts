@@ -6,19 +6,19 @@ import State from '@/lib/state';
 import Router from '@/lib/router';
 
 import Header from '@/views/header';
-import A from '@/views/a';
-import B from '@/views/b';
-import C from '@/views/c';
+import Main from '@/views/main';
+import Calendar from '@/views/calendar';
+import Statistics from '@/views/statistics';
 
 const store = new State(); // 어플리케이션 상태
 const router = new Router(store);
 
 const header = new Header(router);
-const a = new A();
-const b = new B();
-const c = new C();
+const main = new Main();
+const calendar = new Calendar();
+const statistics = new Statistics();
 
 store.subscribe(header);
-store.subscribe(a);
-store.subscribe(b);
-store.subscribe(c);
+store.subscribe(main);
+store.subscribe(calendar);
+store.subscribe(statistics);
