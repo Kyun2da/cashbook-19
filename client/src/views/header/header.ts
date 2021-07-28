@@ -11,17 +11,17 @@ export default class Header implements Observer {
 
   template(state: StoreState): string {
     return `
-      <div class=${styles.header}>
-        <div class=${styles.title}>우아한 가계부</div>
-        <div class=${styles.date}>
-          <button class=${styles.button}><i class="wci-chevron-left"></i></button>
+      <div class="${styles.header}">
+        <div class="${styles.title}">우아한 가계부</div>
+        <div class="${styles.date}">
+          <button class="${styles.button}"><i class="wci-chevron-left"></i></button>
           <div>
-            <div class=${styles.month}>7월</div>
-            <div class=${styles.year}>2021</div>
+            <div class="${styles.month}">7월</div>
+            <div class="${styles.year}">2021</div>
           </div>
-          <button class=${styles.button}><i class="wci-chevron-right"></i></button>
+          <button class="${styles.button}"><i class="wci-chevron-right"></i></button>
         </div>
-        <div class=${styles.menu}>
+        <div class="${styles.menu}">
           <a href="/"><i class="wci-calendar"></i></a>
           <a href="/calendar"><i class="wci-chart"></i></a>
           <a href="/statistics"><i class="wci-file-text"></i></a>
