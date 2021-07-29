@@ -1,8 +1,23 @@
 * {
   box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 a {
   cursor: pointer;
   text-decoration: none;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+body {
+    font-size: 16px;
 }

@@ -1,0 +1,204 @@
+@import "../../core/styles/color.scss";
+
+.main {
+  position:absolute;
+  top: 140px;
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  width: fit-content;
+  justify-content:center;
+  border: 1px solid $placeholder;
+  background-color: $off-white;
+  padding: 16px 24px;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.input {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border-right: 1px solid $placeholder;
+  padding: 0 16px;
+  margin: 0 auto;
+
+
+  label {
+    color: $primary3;
+    margin-bottom: 12px;
+  }
+
+  &:first-of-type{
+    padding-left: 0;
+  }
+
+  &:last-of-type{
+    border-right: none;
+  }
+
+  input {
+    font-size: 1.2rem;
+    background-color: $off-white;
+
+    &::placeholder{
+      color: $label;
+    }
+  }
+}
+
+.date {
+  width: 120px;
+}
+
+.select {
+  font-size: 1.2rem;
+  width: 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  color: $label;
+}
+
+.content-input {
+  width: 200px;
+}
+
+.value-input {
+  width: 120px;
+}
+
+.value-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+
+  input {
+    text-align: right;
+  }
+ 
+}
+
+.button {
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: 1.5rem;
+  border: none;
+  background-color: $off-white;
+  border: 2px solid $primary1;
+  border-radius: 10px;
+  color:$primary1;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 12vw;
+  color: $primary3;
+  font-size: 1.5rem;
+  .button{
+    font-size: 1.5rem;
+  }
+}
+
+.filter{
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  background-color: $grey2;
+  color: $off-white;
+  border: 1px solid $grey2;
+  border-radius: 5px;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 1rem;
+}
+
+.checkbox.active{
+  background-color: $grey2;
+  border: 1px solid $primary1;
+  background-color: $primary1;
+  color: $off-white;
+}
+
+.summary-right {
+  display: flex;
+}
+
+.cash-record-list {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 12vw;
+}
+
+.daily-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0 ;
+  border-bottom: 1px solid $line;
+  font-size: 1rem;
+
+  .date {
+    width: fit-content;
+  }
+
+  .total {
+    width: fit-content;
+    color: $body;
+  }
+}
+
+.record {
+  display: flex;
+  padding: 1rem 0 ;
+  align-items: center;
+  border-bottom: 1px solid $line;
+  font-size: 1rem;
+}
+
+.record-left {
+  display: flex;
+  width:fit-content;
+  align-items: center;
+}
+
+.category {
+  display: flex;
+  width: 6rem;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  margin-right: 1rem;
+  background-color: violet;
+  color: $off-white;
+  border-radius: 999px;
+}
+
+.title {
+  width: 30rem;
+}
+
+.payment {
+  color: $body;
+}
+
+.record-value {
+  margin-left: auto;
+}

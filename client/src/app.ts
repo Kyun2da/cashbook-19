@@ -10,8 +10,18 @@ import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
 
+import data from '@/assets/mockup/record';
+import categoryData from '@/assets/mockup/category';
+import paymentData from '@/assets/mockup/payment';
+
 const store = new State(); // 어플리케이션 상태
 const router = new Router(store);
+
+store.update({
+  records: data.result,
+  categories: categoryData.result,
+  payments: paymentData.result,
+});
 
 const header = new Header(router);
 const main = new Main();
