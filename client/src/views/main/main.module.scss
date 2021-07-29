@@ -123,6 +123,7 @@
 }
 
 .checkbox {
+  position: relative;
   background-color: $grey2;
   color: $off-white;
   border: 1px solid $grey2;
@@ -130,10 +131,14 @@
   width: 1.5rem;
   height: 1.5rem;
   margin: 0 1rem;
+
+  i {
+    position: relative;
+    left: -1px;
+  }
 }
 
-.checkbox.active{
-  background-color: $grey2;
+.checkbox.active {
   border: 1px solid $primary1;
   background-color: $primary1;
   color: $off-white;

@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'woowahan-cashbook-icons';
-  src: url('./woowahan-cashbook-icons.woff2?d874bca4e155e033b66463417dc75e82')
+  src: url('./woowahan-cashbook-icons.woff2?226d19511c892da5acdb55c5e73d873d')
       format('woff2'),
-    url('./woowahan-cashbook-icons.woff?d874bca4e155e033b66463417dc75e82')
+    url('./woowahan-cashbook-icons.woff?226d19511c892da5acdb55c5e73d873d')
       format('woff');
 }
 
@@ -29,18 +29,27 @@
 .wci-check::before {
   content: '\f103';
 }
-.wci-chevron-down::before {
+.wci-check2::before {
   content: '\f104';
 }
-.wci-chevron-left::before {
+.wci-chevron-down::before {
   content: '\f105';
 }
-.wci-chevron-right::before {
+.wci-chevron-left::before {
   content: '\f106';
 }
-.wci-close::before {
+.wci-chevron-right::before {
   content: '\f107';
 }
-.wci-file-text::before {
+.wci-close::before {
   content: '\f108';
+}
+.wci-dash::before {
+  content: '\f109';
+}
+.wci-file-text::before {
+  content: '\f10a';
+}
+.wci-plus::before {
+  content: '\f10b';
 }

@@ -76,7 +76,7 @@ export default class Main implements Observer {
           <div class="${styles.input}">
             <label for="value">금액</label>
             <div class="${styles['value-container']}">
-              -
+              <i class="wci-dash"></i>
               <div class="${styles.value}">
                 <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
                 원
@@ -92,13 +92,13 @@ export default class Main implements Observer {
           <div class="${styles['summary-right']}">
             <div class="${styles.filter}">
               <button type="button" class="${styles.checkbox} ${styles.active}">
-                <i class="wci-check"></i>
+                <i class="wci-check2"></i>
               </button>
               <div>수입 ${income.toLocaleString()}</div>
             </div>
             <div class="${styles.filter}">
               <button type="button" class="${styles.checkbox}">
-                <i class="wci-check"></i>
+                <i class="wci-check2"></i>
               </button>
               <div>지출 ${expenditure.toLocaleString()}</div>
             </div>
