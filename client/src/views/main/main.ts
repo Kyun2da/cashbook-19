@@ -53,7 +53,7 @@ export default class Main implements Observer {
         <form class="${styles.form}">
           <div class="${styles.input}">
             <label for="date">일자</label>
-            <input class=${styles.date} name="date" type="number"/>
+            <input class=${styles.date} name="date" maxlength="8" />
           </div>
           <div class="${styles.input}">
             <label for="category">분류</label>
@@ -64,7 +64,7 @@ export default class Main implements Observer {
           </div>
           <div class="${styles.input}">
             <label for="content">내용</label>
-            <input name="content" placeholder="입력하세요"/>
+            <input class="${styles['content-input']}" name="content" placeholder="입력하세요"/>
           </div>
           <div class="${styles.input}">
             <label for="payment">결제수단</label>
@@ -78,7 +78,7 @@ export default class Main implements Observer {
             <div class="${styles['value-container']}">
               -
               <div class="${styles.value}">
-                <input name="value" placeholder="입력하세요" type="number"/>
+                <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
                 원
               </div>
             </div>

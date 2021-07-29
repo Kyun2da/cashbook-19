@@ -8,11 +8,11 @@
 
 .form {
   display: flex;
+  width: fit-content;
   justify-content:center;
-  width: 72rem;
   border: 1px solid $placeholder;
   background-color: $off-white;
-  padding: 16px 32px;
+  padding: 16px 24px;
   border-radius: 10px;
   margin: 0 auto;
   margin-top: 1rem;
@@ -34,6 +34,10 @@
     margin-bottom: 12px;
   }
 
+  &:first-of-type{
+    padding-left: 0;
+  }
+
   &:last-of-type{
     border-right: none;
   }
@@ -49,7 +53,7 @@
 }
 
 .date {
-  width: 6rem;
+  width: 120px;
 }
 
 .select {
@@ -60,6 +64,14 @@
   justify-content: space-between;
   height: 30px;
   color: $label;
+}
+
+.content-input {
+  width: 200px;
+}
+
+.value-input {
+  width: 120px;
 }
 
 .value-container {
