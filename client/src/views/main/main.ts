@@ -9,25 +9,28 @@ export default class Main implements Observer {
     let income = 0;
     let expenditure = 0;
 
-    const recordsTemplate = records.flatMap((record:CashRecord, i: number) => {
-      const history = [];
-      let value;
-      const categoryIdx = record.categoryId - 1;
-      const categoryColor = categories[categoryIdx].color;
+    const recordsTemplate = records
+      .flatMap((record: CashRecord, i: number) => {
+        const history = [];
+        let value;
+        const categoryIdx = record.categoryId - 1;
+        const categoryColor = categories[categoryIdx].color;
 
-      if (categories[categoryIdx].type === 'expenditure') {
-        expenditure += record.value;
-        value = record.value * -1;
-      } else {
-        income += record.value;
-        value = record.value;
-      }
+        if (categories[categoryIdx].type === 'expenditure') {
+          expenditure += record.value;
+          value = record.value * -1;
+        } else {
+          income += record.value;
+          value = record.value;
+        }
 
-      sum += value;
-      history.push(`
+        sum += value;
+        history.push(`
         <div class="${styles.record}">
           <div class="${styles['record-left']}">
-            <div class="${styles.category}" style="background-color: ${categoryColor}">${categories[categoryIdx].name}</div>
+            <div class="${styles.category}" style="background-color: ${categoryColor}">
+              ${categories[categoryIdx].name}
+            </div>
             <div class="${styles.title}">${record.title}</div>
           </div>
           <div class="${styles.payment}">${payments[record.paymentId - 1].name}</div>
@@ -35,18 +38,20 @@ export default class Main implements Observer {
         </div>
       `);
 
-      if (i === records.length - 1 || records[i].date !== records[i + 1].date) {
-        history.push(`
+        if (i === records.length - 1 || records[i].date !== records[i + 1].date) {
+          history.push(`
           <div class="${styles['daily-summary']}">
             <div class="${styles.date}">${record.date}</div>
             <div class="${styles.total}">${sum > 0 ? '수입 ' : '지출 '} ${sum.toLocaleString()}</div>
           </div>
         `);
 
-        sum = 0;
-      }
-      return history;
-    }).reverse().join('\n');
+          sum = 0;
+        }
+        return history;
+      })
+      .reverse()
+      .join('\n');
 
     return `
       <div class="${styles.main}">

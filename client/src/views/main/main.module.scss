@@ -1,7 +1,7 @@
-@import "../../core/styles/color.scss";
+@import '../../core/styles/color.scss';
 
 .main {
-  position:absolute;
+  position: absolute;
   top: 140px;
   width: 100%;
 }
@@ -9,7 +9,7 @@
 .form {
   display: flex;
   width: fit-content;
-  justify-content:center;
+  justify-content: center;
   border: 1px solid $placeholder;
   background-color: $off-white;
   padding: 16px 24px;
@@ -19,7 +19,6 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-
 .input {
   display: flex;
   flex-direction: column;
@@ -28,17 +27,16 @@
   padding: 0 16px;
   margin: 0 auto;
 
-
   label {
     color: $primary3;
     margin-bottom: 12px;
   }
 
-  &:first-of-type{
+  &:first-of-type {
     padding-left: 0;
   }
 
-  &:last-of-type{
+  &:last-of-type {
     border-right: none;
   }
 
@@ -46,7 +44,7 @@
     font-size: 1.2rem;
     background-color: $off-white;
 
-    &::placeholder{
+    &::placeholder {
       color: $label;
     }
   }
@@ -88,7 +86,6 @@
   input {
     text-align: right;
   }
- 
 }
 
 .button {
@@ -99,7 +96,7 @@
   background-color: $off-white;
   border: 2px solid $primary1;
   border-radius: 10px;
-  color:$primary1;
+  color: $primary1;
 }
 
 .container {
@@ -112,12 +109,12 @@
   margin: 2rem 12vw;
   color: $primary3;
   font-size: 1.5rem;
-  .button{
+  .button {
     font-size: 1.5rem;
   }
 }
 
-.filter{
+.filter {
   display: flex;
   align-items: center;
 }
@@ -157,7 +154,7 @@
 .daily-summary {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 0 ;
+  padding: 1rem 0;
   border-bottom: 1px solid $line;
   font-size: 1rem;
 
@@ -173,7 +170,7 @@
 
 .record {
   display: flex;
-  padding: 1rem 0 ;
+  padding: 1rem 0;
   align-items: center;
   border-bottom: 1px solid $line;
   font-size: 1rem;
@@ -181,7 +178,7 @@
 
 .record-left {
   display: flex;
-  width:fit-content;
+  width: fit-content;
   align-items: center;
 }
 

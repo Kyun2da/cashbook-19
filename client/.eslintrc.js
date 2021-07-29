@@ -3,10 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb-base',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
@@ -25,5 +22,6 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'class-methods-use-this': 'off',
+    'implicit-arrow-linebreak': 'off',
   },
 };
