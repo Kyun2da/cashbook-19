@@ -6,7 +6,7 @@ const data = {
       paymentId: 1,
       title: '커피',
       value: 5400,
-      date: '7월 2일 금',
+      date: '2021-07-02',
     },
     {
       id: 2,
@@ -14,7 +14,7 @@ const data = {
       paymentId: 1,
       title: '체육관 수강 등록',
       value: 125300,
-      date: '7월 4일 일',
+      date: '2021-07-04',
     },
     {
       id: 3,
@@ -22,7 +22,7 @@ const data = {
       paymentId: 1,
       title: '토마토 소스 오므라이스',
       value: 6500,
-      date: '7월 4일 일',
+      date: '2021-07-04',
     },
     {
       id: 4,
@@ -30,7 +30,7 @@ const data = {
       paymentId: 2,
       title: '출력소(컬러인쇄)',
       value: 200,
-      date: '7월 4일 일',
+      date: '2021-07-04',
     },
     {
       id: 5,
@@ -38,7 +38,7 @@ const data = {
       paymentId: 1,
       title: '영화 스트리밍',
       value: 9900,
-      date: '7월 7일 수',
+      date: '2021-07-07',
     },
     {
       id: 6,
@@ -46,7 +46,7 @@ const data = {
       paymentId: 1,
       title: '여름 의류',
       value: 56000,
-      date: '7월 7일 수',
+      date: '2021-07-07',
     },
     {
       id: 7,
@@ -54,7 +54,7 @@ const data = {
       paymentId: 2,
       title: '7월 급여',
       value: 1822480,
-      date: '7월 9일 금',
+      date: '2021-07-09',
     },
     {
       id: 8,
@@ -62,7 +62,7 @@ const data = {
       paymentId: 1,
       title: '잔치국수와 김밥',
       value: 9500,
-      date: '7월 9일 금',
+      date: '2021-07-09',
     },
     {
       id: 9,
@@ -70,7 +70,7 @@ const data = {
       paymentId: 1,
       title: '7월 월세',
       value: 500000,
-      date: '7월 10일 토',
+      date: '2021-07-10',
     },
     {
       id: 10,
@@ -78,7 +78,7 @@ const data = {
       paymentId: 1,
       title: '두유 4개',
       value: 19140,
-      date: '7월 10일 토',
+      date: '2021-07-10',
     },
     {
       id: 11,
@@ -86,7 +86,7 @@ const data = {
       paymentId: 1,
       title: '온라인 세미나 신청',
       value: 10000,
-      date: '7월 13일 화',
+      date: '2021-07-13',
     },
     {
       id: 12,
@@ -94,7 +94,7 @@ const data = {
       paymentId: 1,
       title: '후불 교통비 결제',
       value: 45340,
-      date: '7월 15일 목',
+      date: '2021-07-15',
     },
     {
       id: 13,
@@ -102,7 +102,7 @@ const data = {
       paymentId: 1,
       title: '스트리밍서비스 정기 결제',
       value: 10900,
-      date: '7월 15일 목',
+      date: '2021-07-15',
     },
   ],
 };

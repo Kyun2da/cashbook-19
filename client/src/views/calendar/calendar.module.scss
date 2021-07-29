@@ -1,0 +1,111 @@
+@import '../../core/styles/color.scss';
+
+.calendar-page {
+  position: absolute;
+  top: 172px;
+  width: 100%;
+  padding-bottom: 5rem;
+}
+
+.week {
+  display: flex;
+  justify-content: center;
+  background-color: $off-white;
+  border: 1px solid $line;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1rem 0;
+  color: $grey1;
+
+  div {
+    width: 120px;
+    text-align: center;
+  }
+}
+
+.calendar {
+  display: grid;
+  width: fit-content;
+  margin: 24px auto;
+  justify-content: center;
+  grid-template-columns: repeat(7, 120px);
+  border: 1px solid $line;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  > div {
+    border-left: 1px solid $line;
+    border-top: 1px solid $line;
+  }
+
+  :nth-child(7n + 1) {
+    border-left: none;
+  }
+
+  :nth-child(n):nth-child(-n + 7) {
+    border-top: none;
+  }
+}
+
+.dayNum {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  color: $line;
+}
+
+.block {
+  position: relative;
+  width: 120px;
+  height: 120px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.border-left {
+  border-left: 1px solid $line;
+}
+
+.border-top {
+  border-top: 1px solid $line;
+}
+
+.summary {
+  display: flex;
+  width: 800px;
+  justify-content: space-between;
+  margin: 0 auto;
+  color: $grey1;
+}
+
+.summary-left {
+  display: flex;
+
+  div {
+    margin-right: 24px;
+  }
+}
+
+.income,
+.expenditure,
+.total {
+  margin: 8px;
+}
+
+.income {
+  color: $primary3;
+}
+
+.expenditure {
+  color: $error;
+}
+
+.total {
+  color: $title-active;
+}
