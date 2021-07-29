@@ -1,32 +1,21 @@
+/* eslint-disable import/first */
+
+import 'reflect-metadata';
 import express from 'express';
-import path from 'path';
-import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+import dotenv from 'dotenv';
 
-import indexRouter from './routes/index';
+dotenv.config();
 
-const app = express();
+import loader from '@/loaders';
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+async function startServer() {
+  const app = express();
 
-app.use('/', indexRouter);
+  await loader.init({ expressApp: app });
 
-app.listen(3000, () => {
-  console.log('The application is listening on port 3000!');
-});
-
-// Error Handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    errors: {
-      message: err.message,
-    },
+  app.listen(3000, () => {
+    console.log('The application is listening on port 3000!');
   });
-});
+}
 
-module.exports = app;
+startServer();
