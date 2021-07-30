@@ -16,6 +16,10 @@ class State extends Subject {
       categories: [],
       payments: [],
       records: [],
+      filter: {
+        income: true,
+        expenditure: true,
+      },
     };
   }
 

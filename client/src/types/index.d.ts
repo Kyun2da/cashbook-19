@@ -37,6 +37,11 @@ interface DateState {
   month: number;
 }
 
+interface FilterState {
+  income: boolean;
+  expenditure: boolean;
+}
+
 interface StoreState {
   router: RouterState;
   login: LoginState | null;
@@ -44,4 +49,5 @@ interface StoreState {
   payments: Payment[];
   records: CashRecord[];
   date: DateState;
+  filter: FilterState;
 }
