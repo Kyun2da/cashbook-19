@@ -107,16 +107,28 @@
   display: flex;
   justify-content: space-around;
   margin: 2rem 12vw;
+  font-size: 1.4rem;
   color: $primary3;
-  font-size: 1.5rem;
-  .button {
-    font-size: 1.5rem;
-  }
+}
+
+.summary-right {
+  display: flex;
+  color: $grey2;
 }
 
 .filter {
   display: flex;
   align-items: center;
+
+  &.active {
+    color: $primary3;
+
+    .checkbox {
+      border: 1px solid $primary1;
+      background-color: $primary1;
+      color: $off-white;
+    }
+  }
 }
 
 .checkbox {
@@ -131,18 +143,8 @@
 
   i {
     position: relative;
-    left: -1px;
+    left: -2px;
   }
-}
-
-.checkbox.active {
-  border: 1px solid $primary1;
-  background-color: $primary1;
-  color: $off-white;
-}
-
-.summary-right {
-  display: flex;
 }
 
 .cash-record-list {

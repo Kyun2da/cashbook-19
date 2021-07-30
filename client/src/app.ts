@@ -26,7 +26,7 @@ store.update({
 });
 
 const header = new Header(router, store);
-const main = new Main();
+const main = new Main(store);
 const calendar = new Calendar();
 const statistics = new Statistics();
 
