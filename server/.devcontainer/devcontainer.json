@@ -15,14 +15,10 @@
   },
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "editorconfig.editorconfig"
-  ],
+  "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "editorconfig.editorconfig"],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm i -g npm && npm install",
 
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node"

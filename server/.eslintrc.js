@@ -16,5 +16,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     'object-curly-newline': 'off',
     'no-shadow': 'off',
+    'max-len': ['error', { code: 120 }],
   },
 };

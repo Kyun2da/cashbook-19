@@ -1,12 +1,10 @@
-import express from 'express';
+import { Router } from 'express';
 
-const router = express.Router();
+import oauthRouter from '@/routes/oauth';
+import apiV1Router from '@/routes/api/v1';
 
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.json({
-    hello: 'hi',
-  });
-});
+const router = Router();
+router.use('/oauth', oauthRouter);
+router.use('/api/v1', apiV1Router);
 
 export default router;
