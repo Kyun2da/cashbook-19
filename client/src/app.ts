@@ -1,6 +1,7 @@
 import '@/core/styles/reset.css';
 import '@/core/styles/global.scss';
 import '@/assets/fonts/woowahan-cashbook-icons.css';
+import dayjs from 'dayjs';
 
 import State from '@/core/ui/state';
 import Router from '@/core/utils/router';
@@ -18,12 +19,13 @@ const store = new State(); // 어플리케이션 상태
 const router = new Router(store);
 
 store.update({
+  date: { year: dayjs().year(), month: dayjs().month() + 1 },
   records: data.result,
   categories: categoryData.result,
   payments: paymentData.result,
 });
 
-const header = new Header(router);
+const header = new Header(router, store);
 const main = new Main();
 const calendar = new Calendar();
 const statistics = new Statistics();

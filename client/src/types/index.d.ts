@@ -32,10 +32,16 @@ interface CashRecord {
   date: Date;
 }
 
+interface DateState {
+  year: number;
+  month: number;
+}
+
 interface StoreState {
   router: RouterState;
   login: LoginState | null;
   categories: Category[];
   payments: Payment[];
   records: CashRecord[];
+  date: DateState;
 }

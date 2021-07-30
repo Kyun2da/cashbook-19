@@ -3,8 +3,11 @@ import type { Express } from 'express-serve-static-core';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import debug from 'debug';
 
-import indexRouter from '@/routes';
+import rootRouter from '@/routes';
+
+const log = debug('express:debug');
 
 export default async ({ app }: { app: Express }): Promise<void> => {
   app.use(logger('dev'));
@@ -12,14 +15,14 @@ export default async ({ app }: { app: Express }): Promise<void> => {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  app.use('/', indexRouter);
+  app.use('/', rootRouter);
 
   // Error Handler
   app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
+    log('처리 되지 않은 에러: %O', err);
+    return res.status(500).json({
       errors: {
-        message: err.message,
+        message: process.env.NODE_ENV === 'development' ? err.message : 'INTERNAL_SERVER_ERROR',
       },
     });
   });
