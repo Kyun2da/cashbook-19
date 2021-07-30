@@ -52,6 +52,10 @@
 
   a {
     margin-left: 1rem;
-    color: white;
+    color: $primary2;
+
+    &.active {
+      color: white;
+    }
   }
 }

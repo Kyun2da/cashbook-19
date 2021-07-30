@@ -12,6 +12,7 @@ class State extends Subject {
         hash: '',
       },
       login: null,
+      date: null,
       categories: [],
       payments: [],
       records: [],
