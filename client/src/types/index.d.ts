@@ -51,3 +51,11 @@ interface StoreState {
   date: DateState;
   filter: FilterState;
 }
+
+interface IDonutRecord {
+  id: number;
+  name: string;
+  color: string;
+  value: number;
+  percent: number;
+}
