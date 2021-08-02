@@ -1,9 +1,9 @@
-@import '../../core/styles/color.scss';
+@import '@/core/styles/color.scss';
 
 .statistics-page {
-  position: absolute;
+  position: relative;
   width: 100%;
-  top: 172px;
+  top: -32px;
   display: flex;
   flex-direction: column;
 }

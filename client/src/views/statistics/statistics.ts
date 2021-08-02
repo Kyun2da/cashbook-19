@@ -1,12 +1,12 @@
 import type { Observer } from '@/core/ui/observer';
-import makePercent from '@/core/utils/makePercent';
+import { makePercent } from '@/core/utils/functions';
 import styles from './statistics.module.scss';
 
 export default class Statistics implements Observer {
-  refactorData(state: StoreState): [number, IDonutRecord[]] {
+  private refactorData(state: StoreState): [number, DonutRecord[]] {
     const { categories, records } = state;
     let total = 0;
-    let donutRecord: IDonutRecord[] = [];
+    let donutRecord: DonutRecord[] = [];
 
     // 지출이 될 수 있는 카테고리로 데이터 초기화
     categories.forEach((item) => {
@@ -27,12 +27,7 @@ export default class Statistics implements Observer {
     });
 
     // 도넛 차트 지출 많은 순으로 정렬
-    donutRecord = donutRecord
-      .filter((item) => item.value !== 0)
-      .sort((a, b) => {
-        if (a.value > b.value) return -1;
-        return 0;
-      });
+    donutRecord = donutRecord.filter((item) => item.value !== 0).sort((a, b) => b.value - a.value);
 
     // 지출 금액만 따로 뺄 배열 생성
     const numberArr: number[] = [];
@@ -45,7 +40,7 @@ export default class Statistics implements Observer {
     // 새로운 배열에 100%에 맞춘 정수 퍼센트 가져오기
     const newNumberArr = makePercent(numberArr);
 
-    donutRecord.forEach((item, i) => {
+    donutRecord.forEach((_, i) => {
       donutRecord[i].percent = newNumberArr[i];
     });
 
@@ -54,7 +49,27 @@ export default class Statistics implements Observer {
 
   template(state: StoreState): string {
     const [total, donutRecord] = this.refactorData(state);
+    const categorySummary = this.categorySummary(donutRecord);
+    const donutChart = this.donutChart(donutRecord);
 
+    return `
+      <div class="${styles['statistics-page']}">
+        <div class="${styles['monthly-chart']}">
+          <div class="${styles['donut-chart']}">
+            <svg width="500" height="500" viewBox="0 0 100 100">
+              ${donutChart}
+            </svg>
+          </div>
+          <div class="${styles['monthly-summary']}">
+            <div class="${styles.total}">이번달 지출 금액 ${total.toLocaleString()}</div>
+              ${categorySummary}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  private categorySummary(donutRecord: DonutRecord[]): string {
     const categorySummary = donutRecord
       .map(
         (item) => `
@@ -66,6 +81,10 @@ export default class Statistics implements Observer {
       )
       .join('');
 
+    return categorySummary;
+  }
+
+  private donutChart(donutRecord: DonutRecord[]): string {
     let filled = 0;
     const donutChart = donutRecord
       .map((item) => {
@@ -83,21 +102,7 @@ export default class Statistics implements Observer {
       })
       .join('');
 
-    return `
-      <div class="${styles['statistics-page']}">
-        <div class="${styles['monthly-chart']}">
-          <div class="${styles['donut-chart']}">
-            <svg width="500" height="500" viewBox="0 0 100 100">
-              ${donutChart}
-            </svg>
-          </div>
-          <div class="${styles['monthly-summary']}">
-            <div class="${styles.total}">이번달 지출 금액 ${total.toLocaleString()}</div>
-              ${categorySummary}
-          </div>
-        </div>
-      </div>
-    `;
+    return donutChart;
   }
 
   render(state: StoreState): void {

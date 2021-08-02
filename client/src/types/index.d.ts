@@ -52,7 +52,7 @@ interface StoreState {
   filter: FilterState;
 }
 
-interface IDonutRecord {
+interface DonutRecord {
   id: number;
   name: string;
   color: string;

@@ -25,5 +25,6 @@ module.exports = {
     'implicit-arrow-linebreak': 'off',
     'object-curly-newline': 'off',
     'max-len': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

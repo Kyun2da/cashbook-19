@@ -1,8 +1,8 @@
 @import '../../core/styles/color.scss';
 
 .calendar-page {
-  position: absolute;
-  top: 172px;
+  position: relative;
+  top: -32px;
   width: 100%;
   padding-bottom: 5rem;
 }
