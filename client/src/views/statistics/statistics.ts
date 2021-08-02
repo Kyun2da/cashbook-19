@@ -113,11 +113,11 @@ export default class Statistics implements Observer {
 
     parent.innerHTML = markup;
 
-    this.addEvent();
+    this.addEvent(parent);
   }
 
-  addEvent(): void {
-    const svg = document.querySelector('svg');
+  addEvent(parent: HTMLElement): void {
+    const svg = parent.querySelector('svg');
     Array.from(svg.children).forEach((item: HTMLElement) => {
       const circle = item;
       const data = circle.getAttribute('data-dashoffset');
