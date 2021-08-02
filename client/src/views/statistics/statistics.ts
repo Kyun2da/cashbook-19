@@ -38,7 +38,7 @@ export default class Statistics implements Observer {
     const numberArr: number[] = [];
 
     // numberArr에 퍼센트 추가
-    donutRecord.forEach((item, i) => {
+    donutRecord.forEach((item) => {
       numberArr.push((item.value / total) * 100);
     });
 
