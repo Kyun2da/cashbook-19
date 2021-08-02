@@ -1,8 +1,8 @@
 @import '../../core/styles/color.scss';
 
 .main {
-  position: absolute;
-  top: 156px;
+  position: relative;
+  top: -32px;
   width: 100%;
 }
 
@@ -15,7 +15,6 @@
   padding: 16px 24px;
   border-radius: 10px;
   margin: 0 auto;
-  margin-top: 1rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 

@@ -154,14 +154,14 @@ export default class Main implements Observer {
 
     parent.innerHTML = markup;
 
-    this.addEventHandler(state, parent);
+    this.addEvent(state, parent);
   }
 
   update(state: StoreState): void {
     this.render(state);
   }
 
-  addEventHandler(state: StoreState, parent: HTMLElement): void {
+  addEvent(state: StoreState, parent: HTMLElement): void {
     const incomeFilterButton = parent.querySelector('button[data-filter="income"]');
     const exFilterButton = parent.querySelector('button[data-filter="expenditure"]');
 
