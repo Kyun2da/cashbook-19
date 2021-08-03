@@ -1,19 +1,18 @@
 import { Router } from 'express';
+import { Container } from 'typedi';
 
-import { jwtCheck, handleJwtError } from '@/middlewares/jwt';
-import { handleApiError } from '@/middlewares/api';
+import asyncWrapper from '@/middlewares/async-wrapper';
+import UserController from '@/controllers/user';
 
+import recordRouter from './record';
 import testRouter from './test';
 
 const router = Router();
+const userController = Container.get(UserController);
 
-router.use(jwtCheck);
-// TODO: access, refresh token에 일치하는 path 검사후 올바른지 확인하는 middleware
-router.use(handleJwtError);
+router.get('/init', asyncWrapper(userController.getInit));
 
+router.use('/records', recordRouter);
 router.use('/test', testRouter);
-
-// TODO: request validation error handler
-router.use(handleApiError);
 
 export default router;

@@ -1,0 +1,42 @@
+[
+  {
+    "type": "expenditure",
+    "name": "생활"
+  },
+  {
+    "type": "expenditure",
+    "name": "식비"
+  },
+  {
+    "type": "expenditure",
+    "name": "교통"
+  },
+  {
+    "type": "expenditure",
+    "name": "쇼핑/뷰티"
+  },
+  {
+    "type": "expenditure",
+    "name": "의료/건강"
+  },
+  {
+    "type": "expenditure",
+    "name": "문화/여가"
+  },
+  {
+    "type": "expenditure",
+    "name": "미분류"
+  },
+  {
+    "type": "income",
+    "name": "미분류"
+  },
+  {
+    "type": "income",
+    "name": "월급"
+  },
+  {
+    "type": "income",
+    "name": "기타"
+  }
+]

@@ -2,12 +2,14 @@
 
 import { Service } from 'typedi';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 import oAuthConfig from '@/config/oauth';
 import User from '@/models/user';
 
-const GITHUB_OAUTH_ACCESS_TOKEN_URI = 'https://github.com/login/oauth/access_token';
-const GITHUB_USER_API_URI = 'https://api.github.com/user';
+import CategoryService from './category';
+import PaymentService from './payment';
+import RecordService from './record';
 
 interface UserInfo {
   id: number;
@@ -17,11 +19,23 @@ interface UserInfo {
 
 @Service()
 export default class OAuthService {
+  static GITHUB_OAUTH_ACCESS_TOKEN_URI = 'https://github.com/login/oauth/access_token';
+
+  static GITHUB_USER_API_URI = 'https://api.github.com/user';
+
+  constructor(
+    private categoryServise: CategoryService,
+    private paymentService: PaymentService,
+    private recordService: RecordService,
+  ) {
+    this.signupAndSignin = this.signupAndSignin.bind(this);
+  }
+
   async signupAndSignin(code: string): Promise<number> {
     let userInfo: UserInfo;
     try {
       const accessTokenRes = await axios.post(
-        GITHUB_OAUTH_ACCESS_TOKEN_URI,
+        OAuthService.GITHUB_OAUTH_ACCESS_TOKEN_URI,
         {
           client_id: oAuthConfig.github.clientId,
           client_secret: oAuthConfig.github.clientSecret,
@@ -36,7 +50,7 @@ export default class OAuthService {
       );
       const accessToken = accessTokenRes.data.access_token;
 
-      const userRes = await axios.get(GITHUB_USER_API_URI, {
+      const userRes = await axios.get(OAuthService.GITHUB_USER_API_URI, {
         headers: {
           Authorization: `token ${accessToken}`,
         },
@@ -73,6 +87,11 @@ export default class OAuthService {
       newUser.avatarUri = userInfo.avatarUri;
       await newUser.save();
       userId = newUser.id;
+
+      const categories = await this.categoryServise.makeDefaultCategories(userId);
+      const payments = await this.paymentService.makeDefaultPayments(userId);
+      const now = dayjs();
+      await this.recordService.makeRandomRecord(userId, categories, payments, now.year(), now.month() + 1);
     }
 
     return userId;

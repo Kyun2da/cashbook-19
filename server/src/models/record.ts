@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity } from 'typeorm';
 
-@Entity({ name: 'categories' })
-export default class Category extends BaseEntity {
+@Entity({ name: 'records' })
+export default class Record extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   id: number;
 

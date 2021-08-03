@@ -17,5 +17,6 @@ module.exports = {
     'object-curly-newline': 'off',
     'no-shadow': 'off',
     'max-len': ['error', { code: 120 }],
+    'import/prefer-default-export': 'off',
   },
 };

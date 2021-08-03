@@ -1,3 +1,5 @@
+import { Algorithm } from 'jsonwebtoken';
+
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET 없습니다.');
 }
@@ -6,7 +8,8 @@ const secret = Buffer.from(process.env.JWT_SECRET, 'base64');
 if (!process.env.JWT_ALGORITHM) {
   throw new Error('JWT_ALGORITHM 없습니다.');
 }
-const algorithm = process.env.JWT_ALGORITHM;
+
+const algorithm = process.env.JWT_ALGORITHM as Algorithm;
 
 let accessExpiresIn: number;
 if (!process.env.JWT_ACCESS_EXPIRES_IN) {
