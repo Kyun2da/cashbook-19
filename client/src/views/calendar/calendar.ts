@@ -83,6 +83,4 @@ export default class Calendar extends UIComponent {
       </div>
     `;
   }
-
-  addEvent(): void {}
 }

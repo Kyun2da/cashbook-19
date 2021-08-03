@@ -20,6 +20,7 @@ class State extends Subject {
         income: true,
         expenditure: true,
       },
+      loading: false,
     };
   }
 

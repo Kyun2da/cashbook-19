@@ -10,6 +10,7 @@ import Header from '@/views/header';
 import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
+import Loading from '@/views/loading';
 
 import data from '@/assets/mockup/record';
 import categoryData from '@/assets/mockup/category';
@@ -22,11 +23,13 @@ const header = new Header(router, store);
 const main = new Main(router, store);
 const calendar = new Calendar(router, store);
 const statistics = new Statistics(router, store);
+const loading = new Loading(null, store);
 
 store.subscribe(header);
 store.subscribe(main);
 store.subscribe(calendar);
 store.subscribe(statistics);
+store.subscribe(loading);
 
 store.update({
   date: { year: dayjs().year(), month: dayjs().month() + 1 },

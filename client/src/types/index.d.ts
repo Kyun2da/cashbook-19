@@ -50,6 +50,7 @@ interface StoreState extends Record<string, any> {
   records: CashRecord[];
   date: DateState;
   filter: FilterState;
+  loading: boolean;
 }
 
 interface DonutRecord {

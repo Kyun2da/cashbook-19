@@ -29,7 +29,9 @@ export default abstract class UIComponent implements Observer {
     this.addEvent(state, parent);
   }
 
-  abstract addEvent(state: StoreState, parent: HTMLElement): void;
+  addEvent(state: StoreState, parent: HTMLElement): void {
+    //
+  }
 
   abstract template(state: StoreState): string;
 }

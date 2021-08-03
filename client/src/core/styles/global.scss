@@ -20,6 +20,10 @@ a {
 
 body {
   font-size: 16px;
+
+  &.loading {
+    overflow: hidden;
+  }
 }
 
 main {
