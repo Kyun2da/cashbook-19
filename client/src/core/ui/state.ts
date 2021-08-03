@@ -23,14 +23,15 @@ class State extends Subject {
     };
   }
 
-  // Update the state.
-  // Calls the update method on each observer.
   update(data = {}): void {
-    this.state = Object.assign(this.state, data);
-    this.notify(this.state);
+    const prevState = this.state;
+    this.state = {
+      ...this.state,
+      ...data,
+    };
+    this.notify(prevState, this.state);
   }
 
-  // Get the state.
   get(): StoreState {
     return this.state;
   }

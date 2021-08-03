@@ -42,7 +42,7 @@ interface FilterState {
   expenditure: boolean;
 }
 
-interface StoreState {
+interface StoreState extends Record<string, any> {
   router: RouterState;
   login: LoginState | null;
   categories: Category[];

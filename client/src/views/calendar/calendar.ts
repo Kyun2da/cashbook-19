@@ -1,7 +1,11 @@
-import type { Observer } from '@/core/ui/observer';
+import UIComponent from '@/core/ui/ui-component';
 import styles from './calendar.module.scss';
 
-export default class Calendar implements Observer {
+export default class Calendar extends UIComponent {
+  get targetElement(): HTMLElement {
+    return document.querySelector('main');
+  }
+
   refactorData(state: StoreState): [number[][], number, number] {
     const { records, categories } = state;
     const recordArr = Array.from(Array(32), () => [0, 0, 0]);
@@ -22,6 +26,11 @@ export default class Calendar implements Observer {
     });
 
     return [recordArr, incomeTotal, expenditureTotal];
+  }
+
+  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
+    if (nextState.router.pathname !== '/calendar') return false;
+    return true;
   }
 
   template(state: StoreState): string {
@@ -75,16 +84,5 @@ export default class Calendar implements Observer {
     `;
   }
 
-  render(state: StoreState): void {
-    if (state.router.pathname !== '/calendar') return;
-
-    const markup = this.template(state);
-    const parent = document.querySelector('main');
-
-    parent.innerHTML = markup;
-  }
-
-  update(state: StoreState): void {
-    this.render(state);
-  }
+  addEvent(): void {}
 }

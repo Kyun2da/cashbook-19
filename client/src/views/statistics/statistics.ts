@@ -1,8 +1,12 @@
-import type { Observer } from '@/core/ui/observer';
+import UIComponent from '@/core/ui/ui-component';
 import { makePercent } from '@/core/utils/functions';
 import styles from './statistics.module.scss';
 
-export default class Statistics implements Observer {
+export default class Statistics extends UIComponent {
+  get targetElement(): HTMLElement {
+    return document.querySelector('main');
+  }
+
   private refactorData(state: StoreState): [number, DonutRecord[]] {
     const { categories, records } = state;
     let total = 0;
@@ -105,18 +109,12 @@ export default class Statistics implements Observer {
     return donutChart;
   }
 
-  render(state: StoreState): void {
-    if (state.router.pathname !== '/statistics') return;
-
-    const markup = this.template(state);
-    const parent = document.querySelector('main');
-
-    parent.innerHTML = markup;
-
-    this.addEvent(parent);
+  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
+    if (nextState.router.pathname !== '/statistics') return false;
+    return true;
   }
 
-  addEvent(parent: HTMLElement): void {
+  addEvent(state: StoreState, parent: HTMLElement): void {
     const svg = parent.querySelector('svg');
     Array.from(svg.children).forEach((item: HTMLElement) => {
       const circle = item;
@@ -125,9 +123,5 @@ export default class Statistics implements Observer {
         circle.style['stroke-dashoffset'] = data;
       }, 100);
     });
-  }
-
-  update(state: StoreState): void {
-    this.render(state);
   }
 }

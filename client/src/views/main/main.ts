@@ -1,14 +1,10 @@
-import type { Observer } from '@/core/ui/observer';
-import State from '@/core/ui/state';
-
+import UIComponent from '@/core/ui/ui-component';
 import classNames from 'classnames';
 import styles from './main.module.scss';
 
-export default class Main implements Observer {
-  private store: State;
-
-  constructor(store: State) {
-    this.store = store;
+export default class Main extends UIComponent {
+  get targetElement(): HTMLElement {
+    return document.querySelector('main');
   }
 
   template(state: StoreState): string {
@@ -146,19 +142,9 @@ export default class Main implements Observer {
     `;
   }
 
-  render(state: StoreState): void {
-    if (state.router.pathname !== '/') return;
-
-    const markup = this.template(state);
-    const parent = document.querySelector('main');
-
-    parent.innerHTML = markup;
-
-    this.addEvent(state, parent);
-  }
-
-  update(state: StoreState): void {
-    this.render(state);
+  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
+    if (nextState.router.pathname !== '/') return false;
+    return true;
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
