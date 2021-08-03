@@ -1,4 +1,8 @@
 import UIComponent from '@/core/ui/ui-component';
+import dayjs from 'dayjs';
+
+import { groupingCashRecordsByDate, cashRecordValueSum } from '@/core/utils/functions';
+
 import styles from './calendar.module.scss';
 
 export default class Calendar extends UIComponent {
@@ -6,56 +10,48 @@ export default class Calendar extends UIComponent {
     return document.querySelector('main');
   }
 
-  refactorData(state: StoreState): [number[][], number, number] {
-    const { records, categories } = state;
-    const recordArr = Array.from(Array(32), () => [0, 0, 0]);
-    let incomeTotal = 0;
-    let expenditureTotal = 0;
-
-    records.forEach((item) => {
-      const date = Number(String(item.date).split('-')[2]);
-      if (categories[item.categoryId - 1].type === 'income') {
-        recordArr[date][0] += item.value;
-        recordArr[date][2] += item.value;
-        incomeTotal += item.value;
-      } else {
-        recordArr[date][1] -= item.value;
-        recordArr[date][2] -= item.value;
-        expenditureTotal -= item.value;
-      }
-    });
-
-    return [recordArr, incomeTotal, expenditureTotal];
-  }
-
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
     if (nextState.router.pathname !== '/calendar') return false;
+    if (prevState.date !== nextState.date) return false;
     return true;
   }
 
-  template(state: StoreState): string {
-    const [recordArr, incomeTotal, expenditureTotal] = this.refactorData(state);
+  cellTemplates(year: number, month: number, dayCount: number, groupByDate: CashRecordGroupByDate): string {
+    return [...Array(dayCount)]
+      .map((_, index) => {
+        const date = index + 1;
+        const key = dayjs(`${year}-${month}-${date}`, 'YYYY-M-D').format('YYYY-MM-DD ddd');
+        const recordsAndSum = groupByDate[key];
+        if (!recordsAndSum) {
+          return `<div class="${styles.block}"></div>`;
+        }
 
-    const yearNum = new Date().getFullYear();
-    const monthNum = new Date().getMonth();
-    const dayNum = new Date(yearNum, monthNum + 1, 0).getDate();
-    const frontBlankNum = new Date(yearNum, monthNum, 1).getDay();
-    const backBlankNum = 6 - new Date(yearNum, monthNum, dayNum).getDay();
-    const BlankArr = (num: number) => Array(num).fill(`<div class="${styles.block}"></div>`);
-    const dayArr = (num: number) =>
-      Array.from(Array(num), (_, index) => {
-        const idx = index + 1;
-        const income = recordArr[idx][0] === 0 ? '' : recordArr[idx][0];
-        const expenditure = recordArr[idx][1] === 0 ? '' : recordArr[idx][1];
-        let total: number | string = '';
-        if (income !== '' || expenditure !== '') [, , total] = recordArr[idx];
-        return `<div class="${styles.block}">
-             <div class="${styles.dayNum}">${idx}</div>
-            <div class="${styles.income}">${income.toLocaleString()}</div>
-            <div class="${styles.expenditure}">${expenditure.toLocaleString()}</div>
-            <div class="${styles.total}">${total.toLocaleString()}</div>
-           </div>`;
-      });
+        const { sum } = recordsAndSum;
+        const total = sum.income + sum.expenditure;
+
+        return `
+        <div class="${styles.block}">
+          <div class="${styles.dayNum}">${date}</div>
+          <div class="${styles.income}">${sum.income > 0 ? sum.income.toLocaleString() : ''}</div>
+          <div class="${styles.expenditure}">${sum.expenditure > 0 ? sum.expenditure.toLocaleString() : ''}</div>
+          <div class="${styles.total}">${total.toLocaleString()}</div>
+        </div>
+      `;
+      })
+      .join('');
+  }
+
+  blankTemplate(num: number): string {
+    return Array(num).fill(`<div class="${styles.block}"></div>`).join('');
+  }
+
+  template(state: StoreState): string {
+    const { records, date } = state;
+    const totalSum = cashRecordValueSum(records);
+    const groupByDate = groupingCashRecordsByDate(records);
+    const dayNum = new Date(date.year, date.month, 0).getDate();
+    const frontBlankNum = new Date(date.year, date.month, 1).getDay();
+    const backBlankNum = 6 - new Date(date.year, date.month, dayNum).getDay();
 
     return `
       <div class="${styles['calendar-page']}">
@@ -69,16 +65,16 @@ export default class Calendar extends UIComponent {
           <div>토</div>
         </div>
         <div class="${styles.calendar}">
-          ${BlankArr(frontBlankNum).join('')}
-          ${dayArr(dayNum).join('')}
-          ${BlankArr(backBlankNum).join('')}
+          ${this.blankTemplate(frontBlankNum)}
+          ${this.cellTemplates(date.year, date.month, dayNum, groupByDate)}
+          ${this.blankTemplate(backBlankNum)}
         </div>
         <div class="${styles.summary}">
           <div class="${styles['summary-left']}">
-            <div>총 수입 ${incomeTotal.toLocaleString()}</div>
-            <div>총 지출 ${expenditureTotal.toLocaleString()}</div>
+            <div>총 수입 ${totalSum.income.toLocaleString()}</div>
+            <div>총 지출 ${totalSum.expenditure.toLocaleString()}</div>
           </div>
-          <div>총계 ${(incomeTotal + expenditureTotal).toLocaleString()}</div>
+          <div>총계 ${(totalSum.income + totalSum.expenditure).toLocaleString()}</div>
         </div>
       </div>
     `;

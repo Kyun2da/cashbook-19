@@ -62,3 +62,15 @@ interface DonutRecord {
   value: number;
   percent: number;
 }
+
+interface CashRecordValueSum {
+  income: number;
+  expenditure: number;
+}
+
+interface CashRecordsAndSum {
+  records: CashRecord[];
+  sum: CashRecordValueSum;
+}
+
+type CashRecordGroupByDate = Record<string, CashRecordsAndSum>;

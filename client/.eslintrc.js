@@ -27,5 +27,6 @@ module.exports = {
     'max-len': 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': 'off',
+    'operator-linebreak': 'off',
   },
 };

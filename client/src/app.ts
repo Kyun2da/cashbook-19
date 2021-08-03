@@ -13,7 +13,6 @@ import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
 import Loading from '@/views/loading';
-import paymentData from '@/assets/mockup/payment';
 import { getRecords, init } from './core/utils/api';
 
 dayjs.locale('ko');

@@ -1,69 +1,16 @@
-import dayjs from 'dayjs';
 import UIComponent from '@/core/ui/ui-component';
+
+import { groupingCashRecordsByDate, filterCashRecords, cashRecordValueSum } from '@/core/utils/functions';
+
 import classNames from 'classnames';
 import styles from './main.module.scss';
-
-interface Sum {
-  income: number;
-  expenditure: number;
-}
-
-interface GroupByDate {
-  [key: string]: {
-    records: CashRecord[];
-    sum: Sum;
-  };
-}
 
 export default class Main extends UIComponent {
   get targetElement(): HTMLElement {
     return document.querySelector('main');
   }
 
-  refactorData(state: StoreState): [GroupByDate, Sum, number] {
-    const { records, filter } = state;
-
-    let totalIncome = 0;
-    let totalExpenditure = 0;
-    const filteredRecords = records.filter((record) => {
-      switch (record.category.type) {
-        case 'income':
-          totalIncome += record.value;
-          return filter.income;
-        case 'expenditure':
-          totalExpenditure += record.value;
-          return filter.expenditure;
-        default:
-          return false;
-      }
-    });
-
-    const recordsByDate = filteredRecords.reduce<Record<string, CashRecord[]>>((acc, r) => {
-      const date = dayjs(r.date).format('YYYY-MM-DD ddd');
-      if (!(date in acc)) {
-        acc[date] = [];
-      }
-      acc[date].push(r);
-      return acc;
-    }, {});
-
-    const groupByDate = Object.entries(recordsByDate).reduce<GroupByDate>((acc, [date, rs]) => {
-      const sumOfIncome = rs.filter((r) => r.category.type === 'income').reduce((sum, r) => sum + r.value, 0);
-      const sumOfExpenditure = rs.filter((r) => r.category.type === 'expenditure').reduce((sum, r) => sum + r.value, 0);
-      acc[date] = {
-        records: rs,
-        sum: {
-          income: sumOfIncome,
-          expenditure: sumOfExpenditure,
-        },
-      };
-      return acc;
-    }, {});
-
-    return [groupByDate, { income: totalIncome, expenditure: totalExpenditure }, filteredRecords.length];
-  }
-
-  recordTemplate(groupByDate: GroupByDate): string {
+  recordTemplate(groupByDate: CashRecordGroupByDate): string {
     return Object.entries(groupByDate)
       .flatMap(([date, { records: rs, sum }]) => {
         const templates = [];
@@ -105,8 +52,11 @@ export default class Main extends UIComponent {
   }
 
   template(state: StoreState): string {
-    const [groupByDate, { income: totalIncome, expenditure: totalExpenditure }, totalLength] = this.refactorData(state);
-    const recordsTemplate = this.recordTemplate(groupByDate);
+    const { records, filter } = state;
+
+    const filteredRecords = filterCashRecords(records, filter);
+    const totalSum = cashRecordValueSum(filteredRecords);
+    const groupByDate = groupingCashRecordsByDate(filteredRecords);
 
     return `
       <div class="${styles.main}">
@@ -148,24 +98,24 @@ export default class Main extends UIComponent {
           </button>
         </form>
         <div class="${styles.summary}">
-          <div>전체 내역 ${totalLength}건</div>
+          <div>전체 내역 ${filteredRecords.length}건</div>
           <div class="${styles['summary-right']}">
             <div class="${classNames(styles.filter, { [styles.active]: state.filter.income })}">
               <button type="button" class="${styles.checkbox}" data-filter="income">
                 <i class="wci-check2"></i>
               </button>
-              <div>수입 ${totalIncome.toLocaleString()}</div>
+              <div>수입 ${totalSum.income.toLocaleString()}</div>
             </div>
             <div class="${classNames(styles.filter, { [styles.active]: state.filter.expenditure })}">
               <button type="button" data-filter="expenditure" class="${styles.checkbox}">
                 <i class="wci-check2"></i>
               </button>
-              <div>지출 ${totalExpenditure.toLocaleString()}</div>
+              <div>지출 ${totalSum.expenditure.toLocaleString()}</div>
             </div>
           </div>
         </div>
         <div class="${styles['cash-record-list']}">   
-          ${recordsTemplate}
+          ${this.recordTemplate(groupByDate)}
         </div>
       </div>
     `;
