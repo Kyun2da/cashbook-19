@@ -45,7 +45,6 @@ export default class Header extends UIComponent {
         .month(month - 1)
         .subtract(1, 'month');
       this.store.update({
-        ...state,
         date: {
           year: beforeDate.year(),
           month: beforeDate.month() + 1,
@@ -60,7 +59,6 @@ export default class Header extends UIComponent {
         .month(month - 1)
         .add(1, 'month');
       this.store.update({
-        ...state,
         date: {
           year: nextDate.year(),
           month: nextDate.month() + 1,

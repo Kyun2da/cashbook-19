@@ -1,6 +1,8 @@
 import '@/core/styles/reset.css';
 import '@/core/styles/global.scss';
 import '@/assets/fonts/woowahan-cashbook-icons.css';
+
+import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 
 import State from '@/core/ui/state';
@@ -11,10 +13,10 @@ import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
 import Loading from '@/views/loading';
-
-import data from '@/assets/mockup/record';
-import categoryData from '@/assets/mockup/category';
 import paymentData from '@/assets/mockup/payment';
+import { getRecords, init } from './core/utils/api';
+
+dayjs.locale('ko');
 
 const store = new State();
 const router = new Router(store);
@@ -31,9 +33,24 @@ store.subscribe(calendar);
 store.subscribe(statistics);
 store.subscribe(loading);
 
-store.update({
-  date: { year: dayjs().year(), month: dayjs().month() + 1 },
-  records: data.result,
-  categories: categoryData.result,
-  payments: paymentData.result,
-});
+const stateInit = async () => {
+  const initData = await init(store);
+  console.log(initData);
+  if (!initData) {
+    return;
+  }
+  store.update({
+    user: initData.user,
+    categories: initData.categories,
+    payments: initData.payments,
+  });
+
+  const records = await getRecords(store);
+  if (!records) {
+    return;
+  }
+  store.update({
+    records,
+  });
+};
+stateInit();

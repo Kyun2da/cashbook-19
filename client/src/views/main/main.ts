@@ -1,20 +1,32 @@
+import dayjs from 'dayjs';
 import UIComponent from '@/core/ui/ui-component';
 import classNames from 'classnames';
 import styles from './main.module.scss';
+
+interface Sum {
+  income: number;
+  expenditure: number;
+}
+
+interface GroupByDate {
+  [key: string]: {
+    records: CashRecord[];
+    sum: Sum;
+  };
+}
 
 export default class Main extends UIComponent {
   get targetElement(): HTMLElement {
     return document.querySelector('main');
   }
 
-  template(state: StoreState): string {
-    const { records, categories, payments, filter } = state;
+  refactorData(state: StoreState): [GroupByDate, Sum, number] {
+    const { records, filter } = state;
 
     let totalIncome = 0;
     let totalExpenditure = 0;
     const filteredRecords = records.filter((record) => {
-      const category = categories[record.categoryId - 1];
-      switch (category.type) {
+      switch (record.category.type) {
         case 'income':
           totalIncome += record.value;
           return filter.income;
@@ -26,58 +38,75 @@ export default class Main extends UIComponent {
       }
     });
 
-    let income = 0;
-    let expenditure = 0;
-    const recordsTemplate = filteredRecords
-      .flatMap((record: CashRecord, i: number, arr: CashRecord[]) => {
-        const history = [];
-        let value;
-        const categoryIdx = record.categoryId - 1;
-        const categoryColor = categories[categoryIdx].color;
+    const recordsByDate = filteredRecords.reduce<Record<string, CashRecord[]>>((acc, r) => {
+      const date = dayjs(r.date).format('YYYY-MM-DD ddd');
+      if (!(date in acc)) {
+        acc[date] = [];
+      }
+      acc[date].push(r);
+      return acc;
+    }, {});
 
-        if (categories[categoryIdx].type === 'expenditure') {
-          value = record.value * -1;
-          expenditure += value;
-        } else {
-          value = record.value;
-          income += value;
+    const groupByDate = Object.entries(recordsByDate).reduce<GroupByDate>((acc, [date, rs]) => {
+      const sumOfIncome = rs.filter((r) => r.category.type === 'income').reduce((sum, r) => sum + r.value, 0);
+      const sumOfExpenditure = rs.filter((r) => r.category.type === 'expenditure').reduce((sum, r) => sum + r.value, 0);
+      acc[date] = {
+        records: rs,
+        sum: {
+          income: sumOfIncome,
+          expenditure: sumOfExpenditure,
+        },
+      };
+      return acc;
+    }, {});
+
+    return [groupByDate, { income: totalIncome, expenditure: totalExpenditure }, filteredRecords.length];
+  }
+
+  recordTemplate(groupByDate: GroupByDate): string {
+    return Object.entries(groupByDate)
+      .flatMap(([date, { records: rs, sum }]) => {
+        const templates = [];
+
+        const total = [];
+        if (sum.income !== 0) {
+          total.push(`수입 ${sum.income.toLocaleString()}`);
+        }
+        if (sum.expenditure !== 0) {
+          total.push(`지출 ${sum.expenditure.toLocaleString()}`);
         }
 
-        history.push(`
-        <div class="${styles.record}">
-          <div class="${styles['record-left']}">
-            <div class="${styles.category}" style="background-color: ${categoryColor}">
-              ${categories[categoryIdx].name}
+        rs.forEach((r) => {
+          templates.push(`
+          <div class="${styles.record}">
+            <div class="${styles['record-left']}">
+              <div class="${styles.category}" style="background-color: ${r.category.color}">
+                ${r.category.name}
+              </div>
+              <div class="${styles.title}">${r.title}</div>
             </div>
-            <div class="${styles.title}">${record.title}</div>
+            <div class="${styles.payment}">${r.payment.name}</div>
+            <div class="${styles['record-value']}">${r.value.toLocaleString()}원</div>
           </div>
-          <div class="${styles.payment}">${payments[record.paymentId - 1].name}</div>
-          <div class="${styles['record-value']}">${value.toLocaleString()}원</div>
+        `);
+        });
+
+        templates.push(`
+        <div class="${styles['daily-summary']}">
+          <div class="${styles.date}">${date}</div>
+          <div class="${styles.total}">${total.join(', ')}</div>
         </div>
       `);
 
-        if (i === arr.length - 1 || arr[i].date !== arr[i + 1].date) {
-          const total = [];
-          if (income !== 0) {
-            total.push(`수입 ${income.toLocaleString()}`);
-          }
-          if (expenditure !== 0) {
-            total.push(`지출 ${expenditure.toLocaleString()}`);
-          }
-          history.push(`
-          <div class="${styles['daily-summary']}">
-            <div class="${styles.date}">${record.date}</div>
-            <div class="${styles.total}">${total.join(', ')}</div>
-          </div>
-        `);
-
-          income = 0;
-          expenditure = 0;
-        }
-        return history;
+        return templates;
       })
       .reverse()
-      .join('\n');
+      .join('');
+  }
+
+  template(state: StoreState): string {
+    const [groupByDate, { income: totalIncome, expenditure: totalExpenditure }, totalLength] = this.refactorData(state);
+    const recordsTemplate = this.recordTemplate(groupByDate);
 
     return `
       <div class="${styles.main}">
@@ -119,7 +148,7 @@ export default class Main extends UIComponent {
           </button>
         </form>
         <div class="${styles.summary}">
-          <div>전체 내역 ${filteredRecords.length}건</div>
+          <div>전체 내역 ${totalLength}건</div>
           <div class="${styles['summary-right']}">
             <div class="${classNames(styles.filter, { [styles.active]: state.filter.income })}">
               <button type="button" class="${styles.checkbox}" data-filter="income">

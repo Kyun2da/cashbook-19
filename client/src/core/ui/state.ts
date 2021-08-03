@@ -5,6 +5,8 @@ class State extends Subject {
 
   constructor() {
     super();
+
+    const now = new Date();
     this.state = {
       router: {
         pathname: '',
@@ -12,7 +14,10 @@ class State extends Subject {
         hash: '',
       },
       login: null,
-      date: null,
+      date: {
+        year: now.getFullYear(),
+        month: now.getMonth() + 1,
+      },
       categories: [],
       payments: [],
       records: [],

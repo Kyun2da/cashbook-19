@@ -4,9 +4,9 @@ interface RouterState {
   hash: string;
 }
 
-interface LoginState {
-  avatar: string;
-  username: string;
+interface User {
+  name: string;
+  avatarUri: string;
 }
 
 interface Category {
@@ -42,9 +42,11 @@ interface FilterState {
   expenditure: boolean;
 }
 
-interface StoreState extends Record<string, any> {
+type StoreStateValue = RouterState | User | Category[] | Payment[] | CashRecord[] | DateState | FilterState | boolean;
+
+interface StoreState extends Record<string, StoreStateValue> {
   router: RouterState;
-  login: LoginState | null;
+  login?: User;
   categories: Category[];
   payments: Payment[];
   records: CashRecord[];
