@@ -23,20 +23,24 @@ export default class Calendar extends UIComponent {
         const key = dayjs(`${year}-${month}-${date}`, 'YYYY-M-D').format('YYYY-MM-DD ddd');
         const recordsAndSum = groupByDate[key];
         if (!recordsAndSum) {
-          return `<div class="${styles.block}"></div>`;
+          return `
+            <div class="${styles.block}">
+              <div class="${styles.dayNum}">${date}</div>
+            </div>
+          `;
         }
 
         const { sum } = recordsAndSum;
         const total = sum.income + sum.expenditure;
 
         return `
-        <div class="${styles.block}">
-          <div class="${styles.dayNum}">${date}</div>
-          <div class="${styles.income}">${sum.income > 0 ? sum.income.toLocaleString() : ''}</div>
-          <div class="${styles.expenditure}">${sum.expenditure > 0 ? sum.expenditure.toLocaleString() : ''}</div>
-          <div class="${styles.total}">${total.toLocaleString()}</div>
-        </div>
-      `;
+          <div class="${styles.block}">
+            <div class="${styles.dayNum}">${date}</div>
+            <div class="${styles.income}">${sum.income > 0 ? sum.income.toLocaleString() : ''}</div>
+            <div class="${styles.expenditure}">${sum.expenditure > 0 ? sum.expenditure.toLocaleString() : ''}</div>
+            <div class="${styles.total}">${total.toLocaleString()}</div>
+          </div>
+        `;
       })
       .join('');
   }

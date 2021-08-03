@@ -13,6 +13,9 @@ import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
 import Loading from '@/views/loading';
+
+import DateObserver from '@/observers/date';
+
 import { getRecords, init } from './core/utils/api';
 
 dayjs.locale('ko');
@@ -31,6 +34,9 @@ store.subscribe(main);
 store.subscribe(calendar);
 store.subscribe(statistics);
 store.subscribe(loading);
+
+const dateObserver = new DateObserver(store);
+store.subscribe(dateObserver);
 
 const stateInit = async () => {
   const initData = await init(store);
