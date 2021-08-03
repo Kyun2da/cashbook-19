@@ -5,7 +5,9 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "suppressImplicitAnyIndexErrors": true,
+    "moduleResolution": "node",
     "allowJs": true,
+    "target": "ES2016",
     "lib": ["dom", "ES2019"],
     "paths": {
       "@/*": ["src/*"]

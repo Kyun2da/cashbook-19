@@ -1,17 +1,10 @@
-import type { Observer } from '@/core/ui/observer';
-import type Router from '@/core/utils/router';
-import State from '@/core/ui/state';
 import dayjs from 'dayjs';
+import UIComponent from '@/core/ui/ui-component';
 import styles from './header.module.scss';
 
-export default class Header implements Observer {
-  private router: Router;
-
-  private store: State;
-
-  constructor(router: Router, state: State) {
-    this.router = router;
-    this.store = state;
+export default class Header extends UIComponent {
+  get targetElement(): HTMLElement {
+    return document.querySelector('header');
   }
 
   template(state: StoreState): string {
@@ -37,17 +30,13 @@ export default class Header implements Observer {
     `;
   }
 
-  render(state: StoreState): void {
+  addEvent(state: StoreState, parent: HTMLElement): void {
     const { router, date } = state;
-    const markup = this.template(state);
-    const parent = document.querySelector('header');
-
-    parent.innerHTML = markup;
-    const menu = document.querySelector(`.${styles.menu}`);
+    const menu = parent.querySelector(`.${styles.menu}`);
     menu.addEventListener('click', this.handleClick.bind(this));
 
-    const backMonthButton = document.querySelector('.wci-chevron-left').closest('button');
-    const goMonthButton = document.querySelector('.wci-chevron-right').closest('button');
+    const backMonthButton = parent.querySelector('.wci-chevron-left').closest('button');
+    const goMonthButton = parent.querySelector('.wci-chevron-right').closest('button');
 
     backMonthButton.addEventListener('click', () => {
       const { year, month } = date;
@@ -86,8 +75,12 @@ export default class Header implements Observer {
     });
   }
 
-  update(state: StoreState): void {
-    this.render(state);
+  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
+    if (prevState.router !== nextState.router || prevState.date !== nextState.date) {
+      return true;
+    }
+
+    return false;
   }
 
   handleClick(e: Event): void {
