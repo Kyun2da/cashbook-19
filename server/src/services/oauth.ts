@@ -9,7 +9,7 @@ import User from '@/models/user';
 
 import CategoryService from './category';
 import PaymentService from './payment';
-import RecordService from './record';
+import CashRecordService from './cash-record';
 
 interface UserInfo {
   id: number;
@@ -26,7 +26,7 @@ export default class OAuthService {
   constructor(
     private categoryServise: CategoryService,
     private paymentService: PaymentService,
-    private recordService: RecordService,
+    private cashRecordService: CashRecordService,
   ) {
     this.signupAndSignin = this.signupAndSignin.bind(this);
   }
@@ -91,7 +91,7 @@ export default class OAuthService {
       const categories = await this.categoryServise.makeDefaultCategories(userId);
       const payments = await this.paymentService.makeDefaultPayments(userId);
       const now = dayjs();
-      await this.recordService.makeRandomRecord(userId, categories, payments, now.year(), now.month() + 1);
+      await this.cashRecordService.makeRandomCashRecord(userId, categories, payments, now.year(), now.month() + 1);
     }
 
     return userId;
