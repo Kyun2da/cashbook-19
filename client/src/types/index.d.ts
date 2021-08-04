@@ -4,9 +4,9 @@ interface RouterState {
   hash: string;
 }
 
-interface LoginState {
-  avatar: string;
-  username: string;
+interface User {
+  name: string;
+  avatarUri: string;
 }
 
 interface Category {
@@ -42,14 +42,35 @@ interface FilterState {
   expenditure: boolean;
 }
 
-interface StoreState extends Record<string, any> {
+interface AlertState {
+  title?: string;
+  okMessage?: string;
+  okColor?: string;
+  callback?: (ok: boolean) => void;
+  cancelable?: boolean;
+}
+
+type StoreStateValue =
+  | RouterState
+  | User
+  | Category[]
+  | Payment[]
+  | CashRecord[]
+  | DateState
+  | FilterState
+  | boolean
+  | AlertState;
+
+interface StoreState extends Record<string, StoreStateValue> {
   router: RouterState;
-  login: LoginState | null;
+  user?: User;
   categories: Category[];
   payments: Payment[];
   records: CashRecord[];
   date: DateState;
   filter: FilterState;
+  loading: boolean;
+  alert?: AlertState;
 }
 
 interface DonutRecord {
@@ -59,3 +80,15 @@ interface DonutRecord {
   value: number;
   percent: number;
 }
+
+interface CashRecordValueSum {
+  income: number;
+  expenditure: number;
+}
+
+interface CashRecordsAndSum {
+  records: CashRecord[];
+  sum: CashRecordValueSum;
+}
+
+type CashRecordGroupByDate = Record<string, CashRecordsAndSum>;

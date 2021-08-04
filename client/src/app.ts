@@ -1,6 +1,8 @@
 import '@/core/styles/reset.css';
 import '@/core/styles/global.scss';
 import '@/assets/fonts/woowahan-cashbook-icons.css';
+
+import 'dayjs/locale/ko';
 import dayjs from 'dayjs';
 
 import State from '@/core/ui/state';
@@ -10,10 +12,14 @@ import Header from '@/views/header';
 import Main from '@/views/main';
 import Calendar from '@/views/calendar';
 import Statistics from '@/views/statistics';
+import Loading from '@/views/loading';
 
-import data from '@/assets/mockup/record';
-import categoryData from '@/assets/mockup/category';
-import paymentData from '@/assets/mockup/payment';
+import DateObserver from '@/observers/date';
+
+import { getRecords, init } from './core/utils/api';
+import Alert from './views/alert';
+
+dayjs.locale('ko');
 
 const store = new State();
 const router = new Router(store);
@@ -22,15 +28,36 @@ const header = new Header(router, store);
 const main = new Main(router, store);
 const calendar = new Calendar(router, store);
 const statistics = new Statistics(router, store);
+const loading = new Loading(null, store);
+const alert = new Alert(null, store);
 
 store.subscribe(header);
 store.subscribe(main);
 store.subscribe(calendar);
 store.subscribe(statistics);
+store.subscribe(loading);
+store.subscribe(alert);
 
-store.update({
-  date: { year: dayjs().year(), month: dayjs().month() + 1 },
-  records: data.result,
-  categories: categoryData.result,
-  payments: paymentData.result,
-});
+const dateObserver = new DateObserver(store);
+store.subscribe(dateObserver);
+
+const stateInit = async () => {
+  const initData = await init(store);
+  if (!initData) {
+    return;
+  }
+  store.update({
+    user: initData.user,
+    categories: initData.categories,
+    payments: initData.payments,
+  });
+
+  const records = await getRecords(store);
+  if (!records) {
+    return;
+  }
+  store.update({
+    records,
+  });
+};
+stateInit();

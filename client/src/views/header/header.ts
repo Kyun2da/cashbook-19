@@ -1,10 +1,36 @@
 import dayjs from 'dayjs';
 import UIComponent from '@/core/ui/ui-component';
+
+import config from '@/core/config';
+
+import Router from '@/core/utils/router';
+import State from '@/core/ui/state';
+import { logoutExecute } from '@/core/utils/api';
+import colors from '@/core/styles/color.module.scss';
 import styles from './header.module.scss';
 
 export default class Header extends UIComponent {
+  constructor(router: Router, store: State) {
+    super(router, store);
+    this.toggleLogOut = this.toggleLogOut.bind(this);
+  }
+
   get targetElement(): HTMLElement {
     return document.querySelector('header');
+  }
+
+  loginTemplate(state: StoreState): string {
+    if (!state.user) {
+      return `<a class="${styles.user}" href="${config.baseUrl}/auth/github/login">로그인</a>`;
+    }
+    return `
+      <button class="${styles.user}">
+        <img class="${styles.avatar}" src="${state.user.avatarUri} alt="${state.user.name}" />
+      </button>
+      <div class="${styles.context}">
+        <button type="button" class="logout-btn">로그아웃</button>
+      </div>
+    `;
   }
 
   template(state: StoreState): string {
@@ -25,13 +51,14 @@ export default class Header extends UIComponent {
           <a href="/"><i class="wci-calendar"></i></a>
           <a href="/calendar"><i class="wci-chart"></i></a>
           <a href="/statistics"><i class="wci-file-text"></i></a>
+          ${this.loginTemplate(state)}
         </div>
       </div>
     `;
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
-    const { router, date } = state;
+    const { router, date, user } = state;
     const menu = parent.querySelector(`.${styles.menu}`);
     menu.addEventListener('click', this.handleClick.bind(this));
 
@@ -45,7 +72,6 @@ export default class Header extends UIComponent {
         .month(month - 1)
         .subtract(1, 'month');
       this.store.update({
-        ...state,
         date: {
           year: beforeDate.year(),
           month: beforeDate.month() + 1,
@@ -60,7 +86,6 @@ export default class Header extends UIComponent {
         .month(month - 1)
         .add(1, 'month');
       this.store.update({
-        ...state,
         date: {
           year: nextDate.year(),
           month: nextDate.month() + 1,
@@ -73,14 +98,52 @@ export default class Header extends UIComponent {
         el.classList.add(styles.active);
       }
     });
+
+    if (user) {
+      const logoutButton = parent.querySelector('.logout-btn');
+      const logOut = async (ok: boolean) => {
+        if (ok) {
+          await logoutExecute(this.store);
+        }
+      };
+
+      logoutButton.addEventListener('click', () => {
+        this.store.update({
+          alert: {
+            title: '정말 로그아웃 하시겠습니까?',
+            okMessage: '로그아웃',
+            okColor: colors.error,
+            callback: logOut,
+            cancelable: true,
+          },
+        });
+      });
+
+      window.removeEventListener('click', this.toggleLogOut);
+      window.addEventListener('click', this.toggleLogOut);
+    }
+  }
+
+  toggleLogOut(e: Event): void {
+    const parent = this.targetElement;
+    const contextMenu = parent.querySelector(`.${styles.context}`) as HTMLElement;
+    const avatarUri = parent.querySelector(`.${styles.avatar}`);
+    if (e.target === avatarUri) {
+      contextMenu.classList.toggle(styles.active);
+    } else {
+      contextMenu.classList.remove(styles.active);
+    }
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    if (prevState.router !== nextState.router || prevState.date !== nextState.date) {
-      return true;
+    switch (true) {
+      case prevState.router !== nextState.router:
+      case prevState.date !== nextState.date:
+      case prevState.user !== nextState.user:
+        return true;
+      default:
+        return false;
     }
-
-    return false;
   }
 
   handleClick(e: Event): void {
