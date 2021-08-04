@@ -1,6 +1,6 @@
-import Record from '@/models/record';
+import CashRecord from '@/models/cash-record';
 
-export default class RecordDto {
+export default class CashRecordDto {
   id: number;
 
   categoryId: number;
@@ -13,7 +13,7 @@ export default class RecordDto {
 
   date: Date;
 
-  constructor(record: Record) {
+  constructor(record: CashRecord) {
     this.id = record.id;
     this.categoryId = record.categoryId;
     this.paymentId = record.paymentId;

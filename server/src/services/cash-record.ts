@@ -2,7 +2,7 @@
 import { Service } from 'typedi';
 
 import User from '@/models/user';
-import Record from '@/models/record';
+import CashRecord from '@/models/cash-record';
 import Category from '@/models/category';
 import Payment from '@/models/payment';
 
@@ -11,7 +11,7 @@ import GetRecordsRequest from '@/dtos/request/get-records';
 import { randomInt } from '@/core/utils';
 import dummyRecordName from '@/assets/dummy/record-name.json';
 import dayjs from 'dayjs';
-import RecordDto from '@/dtos/model/record';
+import CashRecordDto from '@/dtos/model/cash-record';
 
 import { Between } from 'typeorm';
 
@@ -30,23 +30,23 @@ interface DummyRecordName {
 }
 
 @Service()
-export default class RecordService {
+export default class CashRecordService {
   static DUMMY_RECORD_NAME: DummyRecordName = dummyRecordName;
 
-  async makeRandomRecord(
+  async makeRandomCashRecord(
     userId: number,
     categories: Category[],
     payments: Payment[],
     year: number,
     month: number,
-  ): Promise<Record[]> {
+  ): Promise<CashRecord[]> {
     const count = randomInt(10, 20);
-    const records: Record[] = [];
+    const records: CashRecord[] = [];
     const frequencies: { [key: string]: number } = {};
     while (records.length < count) {
       const category = categories[randomInt(0, categories.length - 1)];
       const payment = payments[randomInt(0, payments.length - 1)];
-      const type = RecordService.DUMMY_RECORD_NAME[category.type];
+      const type = CashRecordService.DUMMY_RECORD_NAME[category.type];
       if (!type) {
         continue;
       }
@@ -67,7 +67,7 @@ export default class RecordService {
         }
       }
 
-      const record = new Record();
+      const record = new CashRecord();
       record.userId = userId;
       record.categoryId = category.id;
       record.paymentId = payment.id;
@@ -79,10 +79,10 @@ export default class RecordService {
       records.push(record);
     }
 
-    return Record.save(records.sort((a, b) => a.date.getTime() - b.date.getTime()));
+    return CashRecord.save(records.sort((a, b) => a.date.getTime() - b.date.getTime()));
   }
 
-  async getRecords(userId: number, request: GetRecordsRequest): Promise<RecordDto[]> {
+  async getRecords(userId: number, request: GetRecordsRequest): Promise<CashRecordDto[]> {
     let realUserId: number = userId;
     if (!userId) {
       const dummyUser = await User.findOne({ where: { githubId: constant.dummy.githubId } });
@@ -90,10 +90,10 @@ export default class RecordService {
     }
     const startDate = dayjs(`${request.year}-${request.month}-1`, 'YYYY-M-D');
     const endDate = startDate.endOf('month');
-    const records = await Record.find({
+    const records = await CashRecord.find({
       where: { userId: realUserId, date: Between(startDate.toISOString(), endDate.toISOString()) },
     });
 
-    return records.map((r) => new RecordDto(r));
+    return records.map((r) => new CashRecordDto(r));
   }
 }

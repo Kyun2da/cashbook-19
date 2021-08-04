@@ -5,7 +5,7 @@ import Payment from '@/models/payment';
 import UserDto from '@/dtos/model/user';
 import CategoryDto from '@/dtos/model/category';
 import PaymentDto from '@/dtos/model/payment';
-import RecordDto from '@/dtos/model/record';
+import CashRecordDto from '@/dtos/model/cash-record';
 
 export default class InitResponse {
   user?: UserDto;
@@ -14,7 +14,7 @@ export default class InitResponse {
 
   payments: PaymentDto[];
 
-  records: RecordDto[];
+  records: CashRecordDto[];
 
   constructor(user: User | null, categories: Category[], payments: Payment[]) {
     if (user) {

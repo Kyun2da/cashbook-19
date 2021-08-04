@@ -6,7 +6,7 @@ import User from '@/models/user';
 import RefreshToken from '@/models/refresh-token';
 import Category from '@/models/category';
 import Payment from '@/models/payment';
-import Record from '@/models/record';
+import CashRecord from '@/models/cash-record';
 
 export default async (): Promise<void> => {
   await createConnection({
@@ -18,6 +18,6 @@ export default async (): Promise<void> => {
     database: config.database,
     logging: true,
     synchronize: false,
-    entities: [User, RefreshToken, Category, Payment, Record],
+    entities: [User, RefreshToken, Category, Payment, CashRecord],
   });
 };
