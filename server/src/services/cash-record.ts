@@ -6,7 +6,8 @@ import CashRecord from '@/models/cash-record';
 import Category from '@/models/category';
 import Payment from '@/models/payment';
 
-import GetRecordsRequest from '@/dtos/request/get-records';
+import GetRecordsRequest from '@/dtos/request/cash-record/get-records';
+import NewRecordRequest from '@/dtos/request/cash-record/new-record';
 
 import { randomInt } from '@/core/utils';
 import dummyRecordName from '@/assets/dummy/record-name.json';
@@ -94,7 +95,7 @@ export default class CashRecordService {
     }
   }
 
-  async getRecords(userId: string, request: GetRecordsRequest): Promise<CashRecordDto[]> {
+  async getRecords(userId: string | null, request: GetRecordsRequest): Promise<CashRecordDto[]> {
     let realUserId: string = userId;
     if (!userId) {
       const dummyUser = await User.findOne({ where: { githubId: constant.dummy.githubId } });
@@ -110,5 +111,17 @@ export default class CashRecordService {
     });
 
     return records.map((r) => new CashRecordDto(r));
+  }
+
+  async addRecord(userId: string, request: NewRecordRequest): Promise<CashRecordDto> {
+    const cashRecord = new CashRecord();
+    cashRecord.userId = userId;
+    cashRecord.categoryId = request.categoryId;
+    cashRecord.paymentId = request.paymentId;
+    cashRecord.title = request.title;
+    cashRecord.date = request.date;
+    cashRecord.value = request.value;
+    await cashRecord.save();
+    return new CashRecordDto(cashRecord);
   }
 }

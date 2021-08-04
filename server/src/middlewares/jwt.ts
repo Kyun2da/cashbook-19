@@ -71,3 +71,11 @@ export function checkRefreshToken(req: Request, _: Response, next: NextFunction)
 
   next();
 }
+
+export function auth(req: Request, _: Response, next: NextFunction): Response | void {
+  if (!req.jwt?.access) {
+    next(new ApiError('AccessToken이 존재하지 않습니다.', 401));
+  }
+
+  next();
+}
