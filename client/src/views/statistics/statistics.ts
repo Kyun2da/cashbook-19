@@ -51,10 +51,46 @@ export default class Statistics extends UIComponent {
     return [total, donutRecord];
   }
 
+  private categorySummaryTemplate(donutRecord: DonutRecord[]): string {
+    const categorySummary = donutRecord
+      .map(
+        (item) => `
+        <div class="${styles['category-summary']}">
+          <div class="${styles.category}" style="background-color: ${item.color}">${item.name}</div>
+          <div class="${styles.share}">${item.percent}%</div>
+          <div class="${styles.value}">${item.value.toLocaleString()}</div>
+        </div>`,
+      )
+      .join('');
+
+    return categorySummary;
+  }
+
+  private donutChartTemplate(donutRecord: DonutRecord[]): string {
+    let filled = 0;
+    const donutChart = donutRecord
+      .map((item) => {
+        const [startAngle, radius, cx, cy, animationDuration, strokeWidth] = [-90, 30, 50, 50, 2000, 15];
+        const dashArray = 2 * Math.PI * radius;
+        const dashOffset = dashArray - (dashArray * item.percent) / 100;
+        const angle = (filled * 360) / 100 + startAngle;
+        const currentDuration = (animationDuration * item.percent) / 100;
+        const delay = (animationDuration * filled) / 100;
+        filled += item.percent;
+
+        return `
+          <circle r="${radius}" cx="${cx}" cy="${cy}" fill="transparent" stroke="${item.color}" stroke-width="${strokeWidth}" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashArray}" transform="rotate(${angle} ${cx} ${cy})" style="transition: stroke-dashoffset ${currentDuration}ms linear ${delay}ms;" data-dashOffset="${dashOffset}"></circle>
+        `;
+      })
+      .join('');
+
+    return donutChart;
+  }
+
   template(state: StoreState): string {
     const [total, donutRecord] = this.refactorData(state);
-    const categorySummary = this.categorySummary(donutRecord);
-    const donutChart = this.donutChart(donutRecord);
+    const categorySummary = this.categorySummaryTemplate(donutRecord);
+    const donutChart = this.donutChartTemplate(donutRecord);
 
     return `
       <div class="${styles['statistics-page']}">
@@ -71,42 +107,6 @@ export default class Statistics extends UIComponent {
         </div>
       </div>
     `;
-  }
-
-  private categorySummary(donutRecord: DonutRecord[]): string {
-    const categorySummary = donutRecord
-      .map(
-        (item) => `
-        <div class="${styles['category-summary']}">
-          <div class="${styles.category}" style="background-color: ${item.color}">${item.name}</div>
-          <div class="${styles.share}">${item.percent}%</div>
-          <div class="${styles.value}">${item.value.toLocaleString()}</div>
-        </div>`,
-      )
-      .join('');
-
-    return categorySummary;
-  }
-
-  private donutChart(donutRecord: DonutRecord[]): string {
-    let filled = 0;
-    const donutChart = donutRecord
-      .map((item) => {
-        const [startAngle, radius, cx, cy, animationDuration, strokeWidth] = [-90, 30, 50, 50, 2000, 15];
-        const dashArray = 2 * Math.PI * radius;
-        const dashOffset = dashArray - (dashArray * item.percent) / 100;
-        const angle = (filled * 360) / 100 + startAngle;
-        const currentDuration = (animationDuration * item.percent) / 100;
-        const delay = (animationDuration * filled) / 100;
-        filled += item.percent;
-
-        return `
-        <circle r="${radius}" cx="${cx}" cy="${cy}" fill="transparent" stroke="${item.color}" stroke-width="${strokeWidth}" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashArray}" transform="rotate(${angle} ${cx} ${cy})" style="transition: stroke-dashoffset ${currentDuration}ms linear ${delay}ms;" data-dashOffset="${dashOffset}"></circle>
-        `;
-      })
-      .join('');
-
-    return donutChart;
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {

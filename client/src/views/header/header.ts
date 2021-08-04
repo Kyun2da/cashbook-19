@@ -6,17 +6,36 @@ import config from '@/core/config';
 import Router from '@/core/utils/router';
 import State from '@/core/ui/state';
 import { logoutExecute } from '@/core/utils/api';
+
+import classNames from 'classnames';
 import colors from '@/core/styles/color.module.scss';
 import styles from './header.module.scss';
 
 export default class Header extends UIComponent {
   constructor(router: Router, store: State) {
     super(router, store);
-    this.toggleLogOut = this.toggleLogOut.bind(this);
+    this.handleContextClick = this.handleContextClick.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleDateClick = this.handleDateClick.bind(this);
+    this.handleToggleContext = this.handleToggleContext.bind(this);
   }
 
   get targetElement(): HTMLElement {
     return document.querySelector('header');
+  }
+
+  menuTemplate(pathname: string): string {
+    return [
+      `<a href="/" class="${classNames({ [styles.active]: pathname === '/' })}">
+        <i class="wci-calendar"></i>
+      </a>`,
+      `<a href="/calendar" class="${classNames({ [styles.active]: pathname === '/calendar' })}">
+        <i class="wci-chart"></i>
+      </a>`,
+      `<a href="/statistics" class="${classNames({ [styles.active]: pathname === '/statistics' })}">
+        <i class="wci-file-text"></i>
+      </a>`,
+    ].join('');
   }
 
   loginTemplate(state: StoreState): string {
@@ -28,14 +47,17 @@ export default class Header extends UIComponent {
         <img class="${styles.avatar}" src="${state.user.avatarUri} alt="${state.user.name}" />
       </button>
       <div class="${styles.context}">
-        <button type="button" class="logout-btn">로그아웃</button>
+        <button type="button" data-role="logout">로그아웃</button>
       </div>
     `;
   }
 
   template(state: StoreState): string {
-    const { date } = state;
-    const { year, month } = date;
+    const {
+      date: { year, month },
+      router: { pathname },
+    } = state;
+
     return `
       <div class="${styles.header}">
         <div class="${styles.title}">우아한 가계부</div>
@@ -48,91 +70,11 @@ export default class Header extends UIComponent {
           <button class="${styles.button}"><i class="wci-chevron-right"></i></button>
         </div>
         <div class="${styles.menu}">
-          <a href="/"><i class="wci-calendar"></i></a>
-          <a href="/calendar"><i class="wci-chart"></i></a>
-          <a href="/statistics"><i class="wci-file-text"></i></a>
+          ${this.menuTemplate(pathname)}
           ${this.loginTemplate(state)}
         </div>
       </div>
     `;
-  }
-
-  addEvent(state: StoreState, parent: HTMLElement): void {
-    const { router, date, user } = state;
-    const menu = parent.querySelector(`.${styles.menu}`);
-    menu.addEventListener('click', this.handleClick.bind(this));
-
-    const backMonthButton = parent.querySelector('.wci-chevron-left').closest('button');
-    const goMonthButton = parent.querySelector('.wci-chevron-right').closest('button');
-
-    backMonthButton.addEventListener('click', () => {
-      const { year, month } = date;
-      const beforeDate = dayjs()
-        .year(year)
-        .month(month - 1)
-        .subtract(1, 'month');
-      this.store.update({
-        date: {
-          year: beforeDate.year(),
-          month: beforeDate.month() + 1,
-        },
-      });
-    });
-
-    goMonthButton.addEventListener('click', () => {
-      const { year, month } = date;
-      const nextDate = dayjs()
-        .year(year)
-        .month(month - 1)
-        .add(1, 'month');
-      this.store.update({
-        date: {
-          year: nextDate.year(),
-          month: nextDate.month() + 1,
-        },
-      });
-    });
-
-    Array.from(menu.children).forEach((el) => {
-      if (el.getAttribute('href') === router.pathname) {
-        el.classList.add(styles.active);
-      }
-    });
-
-    if (user) {
-      const logoutButton = parent.querySelector('.logout-btn');
-      const logOut = async (ok: boolean) => {
-        if (ok) {
-          await logoutExecute(this.store);
-        }
-      };
-
-      logoutButton.addEventListener('click', () => {
-        this.store.update({
-          alert: {
-            title: '정말 로그아웃 하시겠습니까?',
-            okMessage: '로그아웃',
-            okColor: colors.error,
-            callback: logOut,
-            cancelable: true,
-          },
-        });
-      });
-
-      window.removeEventListener('click', this.toggleLogOut);
-      window.addEventListener('click', this.toggleLogOut);
-    }
-  }
-
-  toggleLogOut(e: Event): void {
-    const parent = this.targetElement;
-    const contextMenu = parent.querySelector(`.${styles.context}`) as HTMLElement;
-    const avatarUri = parent.querySelector(`.${styles.avatar}`);
-    if (e.target === avatarUri) {
-      contextMenu.classList.toggle(styles.active);
-    } else {
-      contextMenu.classList.remove(styles.active);
-    }
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
@@ -146,7 +88,78 @@ export default class Header extends UIComponent {
     }
   }
 
-  handleClick(e: Event): void {
+  addEvent(state: StoreState, parent: HTMLElement): void {
+    parent.querySelector(`.${styles.menu}`).addEventListener('click', this.handleMenuClick);
+    parent.querySelector(`.${styles.date}`).addEventListener('click', this.handleDateClick);
+
+    if (state.user) {
+      parent.querySelector(`.${styles.context}`).addEventListener('click', this.handleContextClick);
+      window.removeEventListener('click', this.handleToggleContext);
+      window.addEventListener('click', this.handleToggleContext);
+    }
+  }
+
+  handleToggleContext(e: Event): void {
+    const parent = this.targetElement;
+    const contextMenu = parent.querySelector(`.${styles.context}`) as HTMLElement;
+    const avatarUri = parent.querySelector(`.${styles.avatar}`);
+    if (e.target === avatarUri) {
+      contextMenu.classList.toggle(styles.active);
+    } else {
+      contextMenu.classList.remove(styles.active);
+    }
+  }
+
+  handleContextClick(e: Event): void {
+    const target = e.target as HTMLElement;
+
+    if (target.dataset.role === 'logout') {
+      this.store.update({
+        alert: {
+          title: '정말 로그아웃 하시겠습니까?',
+          okMessage: '로그아웃',
+          okColor: colors.error,
+          callback: async (ok: boolean) => {
+            if (ok) {
+              await logoutExecute(this.store);
+            }
+          },
+          cancelable: true,
+        },
+      });
+    }
+  }
+
+  handleDateClick(e: Event): void {
+    const target = e.target as HTMLElement;
+    let moveMonth = 0;
+    if (target.tagName === 'I') {
+      if (target.classList.contains('wci-chevron-left')) {
+        moveMonth = -1;
+      } else if (target.classList.contains('wci-chevron-right')) {
+        moveMonth = 1;
+      }
+    }
+
+    if (moveMonth === 0) {
+      e.preventDefault();
+      return;
+    }
+
+    const { year, month } = this.store.get().date;
+    const beforeDate = dayjs()
+      .year(year)
+      .month(month - 1)
+      .add(moveMonth, 'month');
+    this.store.update({
+      date: {
+        year: beforeDate.year(),
+        month: beforeDate.month() + 1,
+      },
+    });
+  }
+
+  handleMenuClick(e: Event): void {
     const target = e.target as HTMLElement;
 
     if (target.tagName === 'I') {
