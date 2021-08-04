@@ -42,7 +42,24 @@ interface FilterState {
   expenditure: boolean;
 }
 
-type StoreStateValue = RouterState | User | Category[] | Payment[] | CashRecord[] | DateState | FilterState | boolean;
+interface AlertState {
+  title?: string;
+  okMessage?: string;
+  okColor?: string;
+  callback?: (ok: boolean) => void;
+  cancelable?: boolean;
+}
+
+type StoreStateValue =
+  | RouterState
+  | User
+  | Category[]
+  | Payment[]
+  | CashRecord[]
+  | DateState
+  | FilterState
+  | boolean
+  | AlertState;
 
 interface StoreState extends Record<string, StoreStateValue> {
   router: RouterState;
@@ -53,6 +70,7 @@ interface StoreState extends Record<string, StoreStateValue> {
   date: DateState;
   filter: FilterState;
   loading: boolean;
+  alert?: AlertState;
 }
 
 interface DonutRecord {

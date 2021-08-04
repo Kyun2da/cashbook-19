@@ -5,6 +5,8 @@ import config from '@/core/config';
 
 import Router from '@/core/utils/router';
 import State from '@/core/ui/state';
+import { logoutExecute } from '@/core/utils/api';
+import colors from '@/core/styles/color.module.scss';
 import styles from './header.module.scss';
 
 export default class Header extends UIComponent {
@@ -21,13 +23,12 @@ export default class Header extends UIComponent {
     if (!state.user) {
       return `<a class="${styles.user}" href="${config.baseUrl}/auth/github/login">로그인</a>`;
     }
-    // href="${config.baseUrl}/auth/logout"
     return `
       <button class="${styles.user}">
         <img class="${styles.avatar}" src="${state.user.avatarUri} alt="${state.user.name}" />
       </button>
       <div class="${styles.context}">
-        <button type="button">로그아웃</button>
+        <button type="button" class="logout-btn">로그아웃</button>
       </div>
     `;
   }
@@ -99,6 +100,26 @@ export default class Header extends UIComponent {
     });
 
     if (user) {
+      const logoutButton = parent.querySelector('.logout-btn');
+      const logOut = async (ok: boolean) => {
+        if (ok) {
+          await logoutExecute(this.store);
+        }
+      };
+
+      logoutButton.addEventListener('click', () => {
+        console.log(colors);
+        this.store.update({
+          alert: {
+            title: '정말 로그아웃 하시겠습니까?',
+            okMessage: '로그아웃',
+            okColor: colors.error,
+            callback: logOut,
+            cancelable: true,
+          },
+        });
+      });
+
       window.removeEventListener('click', this.toggleLogOut);
       window.addEventListener('click', this.toggleLogOut);
     }

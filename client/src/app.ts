@@ -17,6 +17,7 @@ import Loading from '@/views/loading';
 import DateObserver from '@/observers/date';
 
 import { getRecords, init } from './core/utils/api';
+import Alert from './views/alert';
 
 dayjs.locale('ko');
 
@@ -28,12 +29,14 @@ const main = new Main(router, store);
 const calendar = new Calendar(router, store);
 const statistics = new Statistics(router, store);
 const loading = new Loading(null, store);
+const alert = new Alert(null, store);
 
 store.subscribe(header);
 store.subscribe(main);
 store.subscribe(calendar);
 store.subscribe(statistics);
 store.subscribe(loading);
+store.subscribe(alert);
 
 const dateObserver = new DateObserver(store);
 store.subscribe(dateObserver);

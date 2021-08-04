@@ -26,6 +26,7 @@ class State extends Subject {
         expenditure: true,
       },
       loading: false,
+      alert: null,
     };
   }
 

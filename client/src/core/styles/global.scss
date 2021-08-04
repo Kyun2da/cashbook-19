@@ -21,7 +21,8 @@ a {
 body {
   font-size: 16px;
 
-  &.loading {
+  &.loading,
+  &.alert {
     overflow: hidden;
   }
 }

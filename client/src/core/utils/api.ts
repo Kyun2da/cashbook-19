@@ -1,4 +1,5 @@
-import State from '@/core/ui/State';
+import State from '@/core/ui/state';
+import Router from '@/core/utils/router';
 
 class ResponseError extends Error {
   constructor(public response: Response) {
@@ -11,6 +12,7 @@ const api = {
     fetch(`${process.env.BASE_URL}${target}`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'manual',
     }),
   post: () => {},
   put: () => {},
@@ -65,6 +67,21 @@ export const getRecords = async (store: State): Promise<CashRecord[] | void> => 
       // 어쩌징 ㅎㅎ
       // 적절한 alert를 호출??
     }
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const logoutExecute = async (store: State): Promise<void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.get('/auth/logout');
+    if (!('location' in response.headers)) {
+      window.location.reload();
+    }
+  } catch (e) {
+    // 어쩌징 ㅎㅎ
+    // 적절한 alert를 호출??
   } finally {
     store.update({ loading: false });
   }

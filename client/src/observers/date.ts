@@ -13,7 +13,7 @@ export default class DateObserver implements Observer {
   }
 
   async update(prevState: StoreState, nextState: StoreState): Promise<void> {
-    if (prevState.date === nextState.date) {
+    if (prevState.user === nextState.user && prevState.date === nextState.date) {
       return;
     }
 
