@@ -10,22 +10,22 @@ interface User {
 }
 
 interface Category {
-  id: number;
+  id: string;
   type: 'income' | 'expenditure';
   name: string;
   color: string;
 }
 
 interface Payment {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface CashRecord {
-  id: number;
-  categoryId: number;
+  id: string;
+  categoryId: string;
   category: Category;
-  paymentId: number;
+  paymentId: string;
   payment: Payment;
   title: string;
   value: number;
@@ -74,7 +74,7 @@ interface StoreState extends Record<string, StoreStateValue> {
 }
 
 interface DonutRecord {
-  id: number;
+  id: string;
   name: string;
   color: string;
   value: number;

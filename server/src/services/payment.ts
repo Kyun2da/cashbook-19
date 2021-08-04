@@ -6,7 +6,7 @@ import Payment from '@/models/payment';
 export default class PaymentService {
   static DUMMY_PAYMENTS = ['농협통장', '카카오뱅크', '현대카드', '비씨카드', '현금'];
 
-  async makeDefaultPayments(userId: number): Promise<Payment[]> {
+  async makeDefaultPayments(userId: string): Promise<Payment[]> {
     const defaultPayments = PaymentService.DUMMY_PAYMENTS.map((name) => {
       const payment = new Payment();
       payment.userId = userId;

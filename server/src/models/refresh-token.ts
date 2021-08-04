@@ -2,11 +2,11 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity } 
 
 @Entity({ name: 'refresh_tokens' })
 export default class RefreshToken extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id: number;
+  @PrimaryGeneratedColumn({ name: 'id', type: 'bigint', unsigned: true })
+  id: string;
 
   @Column({ name: 'user_id', type: 'bigint', unsigned: true })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'valid_until', type: 'datetime' })
   validUntil: Date;

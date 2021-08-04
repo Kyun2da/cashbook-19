@@ -25,7 +25,7 @@ export default class OAuthService {
     this.signupAndSignin = this.signupAndSignin.bind(this);
   }
 
-  async signupAndSignin(code: string): Promise<number> {
+  async signupAndSignin(code: string): Promise<string> {
     let userInfo: UserInfo;
     try {
       const accessTokenRes = await axios.post(
@@ -66,7 +66,7 @@ export default class OAuthService {
       ],
     });
 
-    let userId: number;
+    let userId: string;
     if (foundUser) {
       // 업데이트
       foundUser.name = userInfo.name;

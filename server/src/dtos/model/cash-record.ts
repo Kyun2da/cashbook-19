@@ -1,11 +1,11 @@
 import CashRecord from '@/models/cash-record';
 
 export default class CashRecordDto {
-  id: number;
+  id: string;
 
-  categoryId: number;
+  categoryId: string;
 
-  paymentId: number;
+  paymentId: string;
 
   title: string;
 

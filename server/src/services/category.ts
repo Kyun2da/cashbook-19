@@ -14,7 +14,7 @@ interface DummyCategory {
 export default class CategoryService {
   static DUMMY_CATEGORIES: DummyCategory[] = dummyCategories;
 
-  async makeDefaultCategories(userId: number): Promise<Category[]> {
+  async makeDefaultCategories(userId: string): Promise<Category[]> {
     const defaultCategories = CategoryService.DUMMY_CATEGORIES.map((dummy) => {
       const category = new Category();
       category.userId = userId;

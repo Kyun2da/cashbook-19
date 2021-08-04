@@ -8,10 +8,10 @@ export enum PaymentType {
 @Entity({ name: 'categories' })
 export default class Category extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id', type: 'bigint', unsigned: true })
-  id: number;
+  id: string;
 
   @Column({ name: 'user_id', type: 'bigint', unsigned: true })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'type', enum: PaymentType })
   type: PaymentType;

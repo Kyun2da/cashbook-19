@@ -1,7 +1,7 @@
 import Payment from '@/models/payment';
 
 export default class PaymentDto {
-  id: number;
+  id: string;
 
   name: string;
 

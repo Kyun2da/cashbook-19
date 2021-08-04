@@ -34,7 +34,7 @@ export default class CashRecordService {
   static DUMMY_RECORD_NAME: DummyRecordName = dummyRecordName;
 
   async makeRandomCashRecord(
-    userId: number,
+    userId: string,
     categories: Category[],
     payments: Payment[],
     year: number,
@@ -83,7 +83,7 @@ export default class CashRecordService {
     await CashRecord.createQueryBuilder().insert().values(records).execute();
   }
 
-  async makeDummyIfTheMonthEmpty(userId: number, year: number, month: number): Promise<void> {
+  async makeDummyIfTheMonthEmpty(userId: string, year: number, month: number): Promise<void> {
     const startDate = dayjs(`${year}-${month}-1`, 'YYYY-M-D');
     const endDate = startDate.endOf('month');
     const count = await CashRecord.count({ where: { userId, date: Between(startDate.toDate(), endDate.toDate()) } });
@@ -94,8 +94,8 @@ export default class CashRecordService {
     }
   }
 
-  async getRecords(userId: number, request: GetRecordsRequest): Promise<CashRecordDto[]> {
-    let realUserId: number = userId;
+  async getRecords(userId: string, request: GetRecordsRequest): Promise<CashRecordDto[]> {
+    let realUserId: string = userId;
     if (!userId) {
       const dummyUser = await User.findOne({ where: { githubId: constant.dummy.githubId } });
       realUserId = dummyUser.id;

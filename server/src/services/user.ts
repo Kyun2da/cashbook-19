@@ -10,7 +10,7 @@ import constant from '@/core/constant';
 
 @Service()
 export default class UserService {
-  async getInitData(userId: number | null): Promise<InitResponse> {
+  async getInitData(userId: string | null): Promise<InitResponse> {
     const isDummy = !userId;
     const user = isDummy
       ? await User.findOne({ where: { githubId: constant.dummy.githubId } })

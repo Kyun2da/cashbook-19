@@ -1,11 +1,11 @@
 interface AccessToken {
   type: 'access';
-  userId: number;
+  userId: string;
 }
 
 interface RefreshToken {
   type: 'refresh';
-  tokenId: number;
+  tokenId: string;
 }
 
 declare namespace Express {

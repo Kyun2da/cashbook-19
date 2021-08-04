@@ -1,7 +1,7 @@
 import Category, { PaymentType } from '@/models/category';
 
 export default class CategoryDto {
-  id: number;
+  id: string;
 
   type: PaymentType;
 

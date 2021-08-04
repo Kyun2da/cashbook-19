@@ -2,11 +2,11 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity({ name: 'payments' })
 export default class Payment extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id: number;
+  @PrimaryGeneratedColumn({ name: 'id', type: 'bigint', unsigned: true })
+  id: string;
 
   @Column({ name: 'user_id', type: 'bigint', unsigned: true })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'name', type: 'varchar', length: 30 })
   name: string;

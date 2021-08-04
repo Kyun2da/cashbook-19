@@ -14,7 +14,7 @@ interface Tokens {
 
 @Service()
 export default class JwtService {
-  async issueToken(userId: number): Promise<Tokens> {
+  async issueToken(userId: string): Promise<Tokens> {
     const accessToken = jwt.sign(
       {
         type: 'access',
@@ -50,7 +50,7 @@ export default class JwtService {
     };
   }
 
-  async removeRefreshToken(refreshTokenId: number): Promise<void> {
+  async removeRefreshToken(refreshTokenId: string): Promise<void> {
     const foundRefreshToken = await RefreshToken.findOne(refreshTokenId);
     if (!foundRefreshToken) {
       throw new ApiError('존재하지 않는 refresh token 입니다.', 404);
@@ -59,7 +59,7 @@ export default class JwtService {
     await foundRefreshToken.remove();
   }
 
-  async refreshToken(refreshTokenId: number): Promise<Tokens> {
+  async refreshToken(refreshTokenId: string): Promise<Tokens> {
     const foundRefreshToken = await RefreshToken.findOne(refreshTokenId);
     if (!foundRefreshToken) {
       throw new ApiError('존재하지 않는 refresh token 입니다.', 404);

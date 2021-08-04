@@ -2,17 +2,17 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity({ name: 'records' })
 export default class CashRecord extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id: number;
+  @PrimaryGeneratedColumn({ name: 'id', type: 'bigint', unsigned: true })
+  id: string;
 
   @Column({ name: 'user_id', type: 'bigint', unsigned: true })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'category_id', type: 'bigint', unsigned: true })
-  categoryId: number;
+  categoryId: string;
 
   @Column({ name: 'payment_id', type: 'bigint', unsigned: true })
-  paymentId: number;
+  paymentId: string;
 
   @Column({ name: 'title', type: 'varchar', length: 255 })
   title: string;
