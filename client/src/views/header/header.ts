@@ -3,9 +3,16 @@ import UIComponent from '@/core/ui/ui-component';
 
 import config from '@/core/config';
 
+import Router from '@/core/utils/router';
+import State from '@/core/ui/state';
 import styles from './header.module.scss';
 
 export default class Header extends UIComponent {
+  constructor(router: Router, store: State) {
+    super(router, store);
+    this.toggleLogOut = this.toggleLogOut.bind(this);
+  }
+
   get targetElement(): HTMLElement {
     return document.querySelector('header');
   }
@@ -14,11 +21,14 @@ export default class Header extends UIComponent {
     if (!state.user) {
       return `<a class="${styles.user}" href="${config.baseUrl}/auth/github/login">로그인</a>`;
     }
-
+    // href="${config.baseUrl}/auth/logout"
     return `
-      <a class="${styles.user}" href="${config.baseUrl}/auth/logout">
+      <button class="${styles.user}">
         <img class="${styles.avatar}" src="${state.user.avatarUri} alt="${state.user.name}" />
-      </a>
+      </button>
+      <div class="${styles.context}">
+        <button type="button">로그아웃</button>
+      </div>
     `;
   }
 
@@ -47,7 +57,7 @@ export default class Header extends UIComponent {
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
-    const { router, date } = state;
+    const { router, date, user } = state;
     const menu = parent.querySelector(`.${styles.menu}`);
     menu.addEventListener('click', this.handleClick.bind(this));
 
@@ -87,6 +97,22 @@ export default class Header extends UIComponent {
         el.classList.add(styles.active);
       }
     });
+
+    if (user) {
+      window.removeEventListener('click', this.toggleLogOut);
+      window.addEventListener('click', this.toggleLogOut);
+    }
+  }
+
+  toggleLogOut(e: Event): void {
+    const parent = this.targetElement;
+    const contextMenu = parent.querySelector(`.${styles.context}`) as HTMLElement;
+    const avatarUri = parent.querySelector(`.${styles.avatar}`);
+    if (e.target === avatarUri) {
+      contextMenu.classList.toggle(styles.active);
+    } else {
+      contextMenu.classList.remove(styles.active);
+    }
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
