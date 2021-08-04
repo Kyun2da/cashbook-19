@@ -7,12 +7,18 @@ import debug from 'debug';
 import cors from 'cors';
 
 import rootRouter from '@/routes';
+import config from '@/config';
 
 const log = debug('express:debug');
 
 export default async ({ app }: { app: Express }): Promise<void> => {
   app.use(logger(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
-  app.use(cors());
+  app.use(
+    cors({
+      credentials: true,
+      origin: config.siteUri,
+    }),
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
