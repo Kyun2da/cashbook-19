@@ -1,13 +1,5 @@
 @import '@/core/styles/color.scss';
 
-.statistics-page {
-  position: relative;
-  width: 100%;
-  top: -32px;
-  display: flex;
-  flex-direction: column;
-}
-
 .monthly-chart {
   display: flex;
   justify-content: center;
@@ -24,6 +16,7 @@
 .monthly-summary {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .total {
@@ -42,9 +35,7 @@
 }
 
 .share {
-  display: flex;
-  align-items: center;
-  width: 240px;
+  flex-grow: 1;
 }
 
 .value {
@@ -55,8 +46,16 @@
 .category-summary {
   display: flex;
   align-items: center;
-  padding: 1rem;
-  padding-left: 0;
+  padding: 1rem 0.4rem;
   font-size: 1.2rem;
   border-bottom: 1px solid $line;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $grey3;
+  }
+
+  &.active {
+    background-color: $primary1;
+  }
 }

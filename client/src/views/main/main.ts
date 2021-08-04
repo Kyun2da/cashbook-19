@@ -7,7 +7,11 @@ import styles from './main.module.scss';
 
 export default class Main extends UIComponent {
   get targetElement(): HTMLElement {
-    return document.querySelector('main');
+    return document.getElementById('main');
+  }
+
+  get targetPathname(): string {
+    return '/';
   }
 
   recordTemplate(groupByDate: CashRecordGroupByDate): string {
@@ -59,71 +63,64 @@ export default class Main extends UIComponent {
     const groupByDate = groupingCashRecordsByDate(filteredRecords);
 
     return `
-      <div class="${styles.main}">
-        <form class="${styles.form}">
-          <div class="${styles.input}">
-            <label for="date">일자</label>
-            <input class=${styles.date} name="date" maxlength="8" />
+      <form class="${styles.form}">
+        <div class="${styles.input}">
+          <label for="date">일자</label>
+          <input class=${styles.date} name="date" maxlength="8" />
+        </div>
+        <div class="${styles.input}">
+          <label for="category">분류</label>
+          <div class="${styles.select}">
+            선택하세요
+            <i class="wci-chevron-down"></i>
           </div>
-          <div class="${styles.input}">
-            <label for="category">분류</label>
-            <div class="${styles.select}">
-              선택하세요
-              <i class="wci-chevron-down"></i>
-            </div>
+        </div>
+        <div class="${styles.input}">
+          <label for="content">내용</label>
+          <input class="${styles['content-input']}" name="content" placeholder="입력하세요"/>
+        </div>
+        <div class="${styles.input}">
+          <label for="payment">결제수단</label>
+          <div class="${styles.select}">
+            선택하세요
+            <i class="wci-chevron-down"></i>
           </div>
-          <div class="${styles.input}">
-            <label for="content">내용</label>
-            <input class="${styles['content-input']}" name="content" placeholder="입력하세요"/>
-          </div>
-          <div class="${styles.input}">
-            <label for="payment">결제수단</label>
-            <div class="${styles.select}">
-              선택하세요
-              <i class="wci-chevron-down"></i>
-            </div>
-          </div>
-          <div class="${styles.input}">
-            <label for="value">금액</label>
-            <div class="${styles['value-container']}">
-              <i class="wci-dash"></i>
-              <div class="${styles.value}">
-                <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
-                원
-              </div>
-            </div>
-          </div>
-          <button type="button" class="${styles.button}">
-            <i class="wci-check"></i>
-          </button>
-        </form>
-        <div class="${styles.summary}">
-          <div>전체 내역 ${filteredRecords.length}건</div>
-          <div class="${styles['summary-right']}">
-            <div class="${classNames(styles.filter, { [styles.active]: state.filter.income })}">
-              <button type="button" class="${styles.checkbox}" data-filter="income">
-                <i class="wci-check2"></i>
-              </button>
-              <div>수입 ${totalSum.income.toLocaleString()}</div>
-            </div>
-            <div class="${classNames(styles.filter, { [styles.active]: state.filter.expenditure })}">
-              <button type="button" data-filter="expenditure" class="${styles.checkbox}">
-                <i class="wci-check2"></i>
-              </button>
-              <div>지출 ${totalSum.expenditure.toLocaleString()}</div>
+        </div>
+        <div class="${styles.input}">
+          <label for="value">금액</label>
+          <div class="${styles['value-container']}">
+            <i class="wci-dash"></i>
+            <div class="${styles.value}">
+              <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
+              원
             </div>
           </div>
         </div>
-        <div class="${styles['cash-record-list']}">   
-          ${this.recordTemplate(groupByDate)}
+        <button type="button" class="${styles.button}">
+          <i class="wci-check"></i>
+        </button>
+      </form>
+      <div class="${styles.summary}">
+        <div>전체 내역 ${filteredRecords.length}건</div>
+        <div class="${styles['summary-right']}">
+          <div class="${classNames(styles.filter, { [styles.active]: state.filter.income })}">
+            <button type="button" class="${styles.checkbox}" data-filter="income">
+              <i class="wci-check2"></i>
+            </button>
+            <div>수입 ${totalSum.income.toLocaleString()}</div>
+          </div>
+          <div class="${classNames(styles.filter, { [styles.active]: state.filter.expenditure })}">
+            <button type="button" data-filter="expenditure" class="${styles.checkbox}">
+              <i class="wci-check2"></i>
+            </button>
+            <div>지출 ${totalSum.expenditure.toLocaleString()}</div>
+          </div>
         </div>
       </div>
+      <div class="${styles['cash-record-list']}">   
+        ${this.recordTemplate(groupByDate)}
+      </div>
     `;
-  }
-
-  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    if (nextState.router.pathname !== '/') return false;
-    return true;
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {

@@ -27,6 +27,7 @@ class State extends Subject {
       },
       loading: false,
       alert: null,
+      statPage: {},
     };
   }
 

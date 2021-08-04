@@ -50,6 +50,11 @@ interface AlertState {
   cancelable?: boolean;
 }
 
+interface StatPageState {
+  categoryId?: string;
+  sumOfMonth?: [number, number, number, number, number, number, number, number, number, number, number, number];
+}
+
 type StoreStateValue =
   | RouterState
   | User
@@ -59,7 +64,8 @@ type StoreStateValue =
   | DateState
   | FilterState
   | boolean
-  | AlertState;
+  | AlertState
+  | StatPageState;
 
 interface StoreState extends Record<string, StoreStateValue> {
   router: RouterState;
@@ -71,6 +77,7 @@ interface StoreState extends Record<string, StoreStateValue> {
   filter: FilterState;
   loading: boolean;
   alert?: AlertState;
+  statPage: StatPageState;
 }
 
 interface DonutRecord {

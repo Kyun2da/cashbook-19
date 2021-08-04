@@ -1,10 +1,25 @@
+import Router from '@/core/utils/router';
+import State from '@/core/ui/state';
+
 import UIComponent from '@/core/ui/ui-component';
 import { makePercent } from '@/core/utils/functions';
-import styles from './statistics.module.scss';
 
-export default class Statistics extends UIComponent {
+import classNames from 'classnames';
+import styles from './pie-chart.module.scss';
+
+export default class PieChart extends UIComponent {
+  constructor(router: Router, store: State) {
+    super(router, store);
+
+    this.handleCategorySummaryClick = this.handleCategorySummaryClick.bind(this);
+  }
+
   get targetElement(): HTMLElement {
-    return document.querySelector('main');
+    return document.getElementById('pie-chart');
+  }
+
+  get targetPathname(): string {
+    return '/statistics';
   }
 
   private refactorData(state: StoreState): [number, DonutRecord[]] {
@@ -51,19 +66,21 @@ export default class Statistics extends UIComponent {
     return [total, donutRecord];
   }
 
-  private categorySummaryTemplate(donutRecord: DonutRecord[]): string {
-    const categorySummary = donutRecord
+  private categorySummaryTemplate(state: StoreState, donutRecord: DonutRecord[]): string {
+    const { categoryId } = state.statPage;
+
+    return donutRecord
       .map(
         (item) => `
-        <div class="${styles['category-summary']}">
-          <div class="${styles.category}" style="background-color: ${item.color}">${item.name}</div>
-          <div class="${styles.share}">${item.percent}%</div>
-          <div class="${styles.value}">${item.value.toLocaleString()}</div>
-        </div>`,
+          <div class="${classNames(styles['category-summary'], { [styles.active]: item.id === categoryId })}"
+            data-category-id="${item.id}"
+          >
+            <div class="${styles.category}" style="background-color: ${item.color}">${item.name}</div>
+            <div class="${styles.share}">${item.percent}%</div>
+            <div class="${styles.value}">${item.value.toLocaleString()}</div>
+          </div>`,
       )
       .join('');
-
-    return categorySummary;
   }
 
   private donutChartTemplate(donutRecord: DonutRecord[]): string {
@@ -89,29 +106,31 @@ export default class Statistics extends UIComponent {
 
   template(state: StoreState): string {
     const [total, donutRecord] = this.refactorData(state);
-    const categorySummary = this.categorySummaryTemplate(donutRecord);
-    const donutChart = this.donutChartTemplate(donutRecord);
 
     return `
-      <div class="${styles['statistics-page']}">
-        <div class="${styles['monthly-chart']}">
-          <div class="${styles['donut-chart']}">
-            <svg width="500" height="500" viewBox="0 0 100 100">
-              ${donutChart}
-            </svg>
-          </div>
-          <div class="${styles['monthly-summary']}">
-            <div class="${styles.total}">이번달 지출 금액 ${total.toLocaleString()}</div>
-              ${categorySummary}
-          </div>
+      <div class="${styles['monthly-chart']}">
+        <div class="${styles['donut-chart']}">
+          <svg width="500" height="500" viewBox="0 0 100 100">
+            ${this.donutChartTemplate(donutRecord)}
+          </svg>
+        </div>
+        <div class="${styles['monthly-summary']}">
+          <div class="${styles.total}">이번달 지출 금액 ${total.toLocaleString()}</div>
+            ${this.categorySummaryTemplate(state, donutRecord)}
         </div>
       </div>
     `;
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    if (nextState.router.pathname !== '/statistics') return false;
-    return true;
+    switch (true) {
+      case prevState.statPage.categoryId !== nextState.statPage.categoryId:
+        return true;
+      case prevState.records === nextState.records:
+        return false;
+      default:
+        return true;
+    }
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
@@ -122,6 +141,24 @@ export default class Statistics extends UIComponent {
       setTimeout(() => {
         circle.style['stroke-dashoffset'] = data;
       }, 100);
+    });
+
+    parent.querySelector(`.${styles['monthly-summary']}`).addEventListener('click', this.handleCategorySummaryClick);
+  }
+
+  handleCategorySummaryClick(e: Event): void {
+    const target = e.target as HTMLElement;
+    const categorySummary = target.closest<HTMLElement>(`.${styles['category-summary']}`);
+    if (!categorySummary) {
+      e.preventDefault();
+      return;
+    }
+
+    const categoryId = categorySummary.dataset.categoryId; //parseInt(categorySummary.dataset.categoryId, 10);
+    this.store.update({
+      statPage: {
+        categoryId,
+      },
     });
   }
 }

@@ -11,7 +11,8 @@ import Router from '@/core/utils/router';
 import Header from '@/views/header';
 import Main from '@/views/main';
 import Calendar from '@/views/calendar';
-import Statistics from '@/views/statistics';
+import PieChart from '@/views/statistics/pie-chart';
+import StatList from '@/views/statistics/stat-list';
 import Loading from '@/views/loading';
 
 import DateObserver from '@/observers/date';
@@ -27,14 +28,16 @@ const router = new Router(store);
 const header = new Header(router, store);
 const main = new Main(router, store);
 const calendar = new Calendar(router, store);
-const statistics = new Statistics(router, store);
+const pieChart = new PieChart(router, store);
+const statList = new StatList(null, store);
 const loading = new Loading(null, store);
 const alert = new Alert(null, store);
 
 store.subscribe(header);
 store.subscribe(main);
 store.subscribe(calendar);
-store.subscribe(statistics);
+store.subscribe(pieChart);
+store.subscribe(statList);
 store.subscribe(loading);
 store.subscribe(alert);
 

@@ -7,11 +7,14 @@ import styles from './calendar.module.scss';
 
 export default class Calendar extends UIComponent {
   get targetElement(): HTMLElement {
-    return document.querySelector('main');
+    return document.getElementById('calendar');
+  }
+
+  get targetPathname(): string {
+    return '/calendar';
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    if (nextState.router.pathname !== '/calendar') return false;
     if (prevState.date !== nextState.date) return false;
     return true;
   }
@@ -58,28 +61,26 @@ export default class Calendar extends UIComponent {
     const backBlankNum = 6 - new Date(date.year, date.month, dayNum).getDay();
 
     return `
-      <div class="${styles['calendar-page']}">
-        <div class="${styles.week}">
-          <div>일</div>
-          <div>월</div>
-          <div>화</div>
-          <div>수</div>
-          <div>목</div>
-          <div>금</div>
-          <div>토</div>
+      <div class="${styles.week}">
+        <div>일</div>
+        <div>월</div>
+        <div>화</div>
+        <div>수</div>
+        <div>목</div>
+        <div>금</div>
+        <div>토</div>
+      </div>
+      <div class="${styles.calendar}">
+        ${this.blankTemplate(frontBlankNum)}
+        ${this.cellTemplates(date.year, date.month, dayNum, groupByDate)}
+        ${this.blankTemplate(backBlankNum)}
+      </div>
+      <div class="${styles.summary}">
+        <div class="${styles['summary-left']}">
+          <div>총 수입 ${totalSum.income.toLocaleString()}</div>
+          <div>총 지출 ${totalSum.expenditure.toLocaleString()}</div>
         </div>
-        <div class="${styles.calendar}">
-          ${this.blankTemplate(frontBlankNum)}
-          ${this.cellTemplates(date.year, date.month, dayNum, groupByDate)}
-          ${this.blankTemplate(backBlankNum)}
-        </div>
-        <div class="${styles.summary}">
-          <div class="${styles['summary-left']}">
-            <div>총 수입 ${totalSum.income.toLocaleString()}</div>
-            <div>총 지출 ${totalSum.expenditure.toLocaleString()}</div>
-          </div>
-          <div>총계 ${(totalSum.income + totalSum.expenditure).toLocaleString()}</div>
-        </div>
+        <div>총계 ${(totalSum.income + totalSum.expenditure).toLocaleString()}</div>
       </div>
     `;
   }

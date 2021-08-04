@@ -1,0 +1,61 @@
+@import '@/core/styles/color.scss';
+
+.cash-record-list {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 12vw;
+}
+
+.daily-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid $line;
+  font-size: 1rem;
+
+  .date {
+    width: fit-content;
+  }
+
+  .total {
+    width: fit-content;
+    color: $body;
+  }
+}
+
+.record {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  border-bottom: 1px solid $line;
+  font-size: 1rem;
+}
+
+.record-left {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+}
+
+.category {
+  display: flex;
+  width: 6rem;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  margin-right: 1rem;
+  background-color: violet;
+  color: $off-white;
+  border-radius: 999px;
+}
+
+.title {
+  width: 30rem;
+}
+
+.payment {
+  color: $body;
+}
+
+.record-value {
+  margin-left: auto;
+}

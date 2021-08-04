@@ -14,9 +14,21 @@ export default abstract class UIComponent implements Observer {
 
   abstract get targetElement(): HTMLElement;
 
-  abstract shouldUpdate(prevState: StoreState, nextState: StoreState): boolean;
+  get targetPathname(): string {
+    return null;
+  }
+
+  shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
+    return true;
+  }
 
   update(prevState: StoreState, nextState: StoreState): void {
+    if (this.targetPathname && this.targetPathname !== nextState.router.pathname) {
+      this.targetElement.style.display = 'none';
+      return;
+    }
+    this.targetElement.style.display = 'block';
+
     if (this.shouldUpdate(prevState, nextState)) {
       this.render(nextState);
     }
