@@ -108,7 +108,6 @@ export default class Header extends UIComponent {
       };
 
       logoutButton.addEventListener('click', () => {
-        console.log(colors);
         this.store.update({
           alert: {
             title: '정말 로그아웃 하시겠습니까?',
