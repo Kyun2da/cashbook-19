@@ -10,7 +10,7 @@ const api = {
   get: (target: string) =>
     fetch(`${process.env.BASE_URL}${target}`, {
       method: 'GET',
-      credentials: 'same-origin',
+      credentials: 'include',
     }),
   post: () => {},
   put: () => {},

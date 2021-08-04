@@ -46,7 +46,7 @@ type StoreStateValue = RouterState | User | Category[] | Payment[] | CashRecord[
 
 interface StoreState extends Record<string, StoreStateValue> {
   router: RouterState;
-  login?: User;
+  user?: User;
   categories: Category[];
   payments: Payment[];
   records: CashRecord[];

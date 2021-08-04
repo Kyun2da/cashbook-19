@@ -13,7 +13,7 @@ class State extends Subject {
         search: '',
         hash: '',
       },
-      login: null,
+      user: null,
       date: {
         year: now.getFullYear(),
         month: now.getMonth() + 1,

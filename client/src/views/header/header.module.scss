@@ -45,10 +45,11 @@
 }
 
 .menu {
-  width: 15rem;
-  font-size: 2rem;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  width: 15rem;
+  font-size: 2rem;
 
   a {
     margin-left: 1rem;
@@ -58,4 +59,17 @@
       color: white;
     }
   }
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: white;
+}
+
+.avatar {
+  width: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid $off-white;
 }

@@ -40,7 +40,6 @@ store.subscribe(dateObserver);
 
 const stateInit = async () => {
   const initData = await init(store);
-  console.log(initData);
   if (!initData) {
     return;
   }

@@ -1,10 +1,25 @@
 import dayjs from 'dayjs';
 import UIComponent from '@/core/ui/ui-component';
+
+import config from '@/core/config';
+
 import styles from './header.module.scss';
 
 export default class Header extends UIComponent {
   get targetElement(): HTMLElement {
     return document.querySelector('header');
+  }
+
+  loginTemplate(state: StoreState): string {
+    if (!state.user) {
+      return `<a class="${styles.user}" href="${config.baseUrl}/auth/github/login">로그인</a>`;
+    }
+
+    return `
+      <a class="${styles.user}" href="${config.baseUrl}/auth/logout">
+        <img class="${styles.avatar}" src="${state.user.avatarUri} alt="${state.user.name}" />
+      </a>
+    `;
   }
 
   template(state: StoreState): string {
@@ -25,6 +40,7 @@ export default class Header extends UIComponent {
           <a href="/"><i class="wci-calendar"></i></a>
           <a href="/calendar"><i class="wci-chart"></i></a>
           <a href="/statistics"><i class="wci-file-text"></i></a>
+          ${this.loginTemplate(state)}
         </div>
       </div>
     `;
@@ -74,11 +90,14 @@ export default class Header extends UIComponent {
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    if (prevState.router !== nextState.router || prevState.date !== nextState.date) {
-      return true;
+    switch (true) {
+      case prevState.router !== nextState.router:
+      case prevState.date !== nextState.date:
+      case prevState.user !== nextState.user:
+        return true;
+      default:
+        return false;
     }
-
-    return false;
   }
 
   handleClick(e: Event): void {
