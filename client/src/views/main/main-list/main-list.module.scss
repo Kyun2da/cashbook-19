@@ -1,0 +1,46 @@
+@import '@/core/styles/color.scss';
+
+.summary {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2rem 12vw;
+  font-size: 1.2rem;
+  color: $primary3;
+}
+
+.summary-right {
+  display: flex;
+  color: $grey2;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+
+  &.active {
+    color: $primary3;
+
+    .checkbox {
+      border: 1px solid $primary1;
+      background-color: $primary1;
+      color: $off-white;
+    }
+  }
+}
+
+.checkbox {
+  position: relative;
+  background-color: $grey2;
+  color: $off-white;
+  border: 1px solid $grey2;
+  border-radius: 5px;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 1rem;
+
+  i {
+    position: relative;
+    left: -2px;
+  }
+}

@@ -2,6 +2,7 @@ import styles from './cash-record-list.module.scss';
 
 export default function CashRecordList(groupByDate: CashRecordGroupByDate): string {
   const recordTemplate = Object.entries(groupByDate)
+    .sort(([a], [b]) => a.localeCompare(b))
     .flatMap(([date, { records: rs, sum }]) => {
       const templates = [];
 

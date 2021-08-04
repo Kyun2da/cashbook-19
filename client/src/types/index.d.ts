@@ -37,7 +37,8 @@ interface DateState {
   month: number;
 }
 
-interface FilterState {
+interface MainState {
+  cashType: 'income' | 'expenditure';
   income: boolean;
   expenditure: boolean;
 }
@@ -62,7 +63,7 @@ type StoreStateValue =
   | Payment[]
   | CashRecord[]
   | DateState
-  | FilterState
+  | MainState
   | boolean
   | AlertState
   | StatPageState;
@@ -74,7 +75,7 @@ interface StoreState extends Record<string, StoreStateValue> {
   payments: Payment[];
   records: CashRecord[];
   date: DateState;
-  filter: FilterState;
+  main: MainState;
   loading: boolean;
   alert?: AlertState;
   statPage: StatPageState;

@@ -21,7 +21,8 @@ class State extends Subject {
       categories: [],
       payments: [],
       records: [],
-      filter: {
+      main: {
+        cashType: 'income',
         income: true,
         expenditure: true,
       },

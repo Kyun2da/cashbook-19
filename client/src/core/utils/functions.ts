@@ -5,7 +5,7 @@ export function makePercent(arr: number[]): number[] {
   return arr.map((x: number, i: number) => Math.round(x) + (off > i ? 1 : 0) - (i >= arr.length + off ? 1 : 0));
 }
 
-export const filterCashRecords = (cashRecords: CashRecord[], filter: FilterState): CashRecord[] =>
+export const filterCashRecords = (cashRecords: CashRecord[], filter: MainState): CashRecord[] =>
   cashRecords.filter(
     (record) =>
       (filter.income && record.category.type === 'income') ||

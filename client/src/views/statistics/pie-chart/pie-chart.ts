@@ -125,6 +125,7 @@ export default class PieChart extends UIComponent {
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
     switch (true) {
       case prevState.statPage.categoryId !== nextState.statPage.categoryId:
+      case prevState.router !== nextState.router:
         return true;
       case prevState.records === nextState.records:
         return false;
@@ -154,7 +155,7 @@ export default class PieChart extends UIComponent {
       return;
     }
 
-    const categoryId = categorySummary.dataset.categoryId; //parseInt(categorySummary.dataset.categoryId, 10);
+    const { categoryId } = categorySummary.dataset; // parseInt(categorySummary.dataset.categoryId, 10);
     this.store.update({
       statPage: {
         categoryId,

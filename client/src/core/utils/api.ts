@@ -1,5 +1,4 @@
 import State from '@/core/ui/state';
-import Router from '@/core/utils/router';
 
 class ResponseError extends Error {
   constructor(public response: Response) {
@@ -14,7 +13,15 @@ const api = {
       credentials: 'include',
       redirect: 'manual',
     }),
-  post: () => {},
+  post: (target: string, data: RequestType) =>
+    fetch(`${process.env.BASE_URL}${target}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }),
   put: () => {},
   delete: () => {},
 };
@@ -79,6 +86,30 @@ export const logoutExecute = async (store: State): Promise<void> => {
     if (!('location' in response.headers)) {
       window.location.reload();
     }
+  } catch (e) {
+    // 어쩌징 ㅎㅎ
+    // 적절한 alert를 호출??
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const enrollRecord = async (store: State, data: NewCashRecordRequest): Promise<void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.post('/api/v1/records', data);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    const { records, categories, payments } = store.get();
+    const newCashRecord = (await response.json()) as CashRecord;
+    newCashRecord.category = categories.find((c) => c.id === newCashRecord.categoryId);
+    newCashRecord.payment = payments.find((p) => p.id === newCashRecord.paymentId);
+
+    store.update({
+      records: [...records, newCashRecord],
+    });
   } catch (e) {
     // 어쩌징 ㅎㅎ
     // 적절한 alert를 호출??

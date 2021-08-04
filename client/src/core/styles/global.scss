@@ -19,6 +19,7 @@ a {
 }
 
 body {
+  padding-bottom: 5rem;
   font-size: 16px;
 
   &.loading,
@@ -29,6 +30,5 @@ body {
   > .page {
     position: relative;
     top: -30px;
-    margin-bottom: 5rem;
   }
 }

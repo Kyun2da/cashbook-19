@@ -9,7 +9,8 @@ import State from '@/core/ui/state';
 import Router from '@/core/utils/router';
 
 import Header from '@/views/header';
-import Main from '@/views/main';
+import Form from '@/views/main/form';
+import MainList from '@/views/main/main-list';
 import Calendar from '@/views/calendar';
 import PieChart from '@/views/statistics/pie-chart';
 import StatList from '@/views/statistics/stat-list';
@@ -26,7 +27,8 @@ const store = new State();
 const router = new Router(store);
 
 const header = new Header(router, store);
-const main = new Main(router, store);
+const form = new Form(router, store);
+const mainList = new MainList(null, store);
 const calendar = new Calendar(router, store);
 const pieChart = new PieChart(router, store);
 const statList = new StatList(null, store);
@@ -34,7 +36,8 @@ const loading = new Loading(null, store);
 const alert = new Alert(null, store);
 
 store.subscribe(header);
-store.subscribe(main);
+store.subscribe(form);
+store.subscribe(mainList);
 store.subscribe(calendar);
 store.subscribe(pieChart);
 store.subscribe(statList);
