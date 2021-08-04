@@ -2,14 +2,12 @@
 
 import { Service } from 'typedi';
 import axios from 'axios';
-import dayjs from 'dayjs';
 
 import oAuthConfig from '@/config/oauth';
 import User from '@/models/user';
 
 import CategoryService from './category';
 import PaymentService from './payment';
-import CashRecordService from './cash-record';
 
 interface UserInfo {
   id: number;
@@ -23,11 +21,7 @@ export default class OAuthService {
 
   static GITHUB_USER_API_URI = 'https://api.github.com/user';
 
-  constructor(
-    private categoryServise: CategoryService,
-    private paymentService: PaymentService,
-    private cashRecordService: CashRecordService,
-  ) {
+  constructor(private categoryServise: CategoryService, private paymentService: PaymentService) {
     this.signupAndSignin = this.signupAndSignin.bind(this);
   }
 
@@ -88,10 +82,8 @@ export default class OAuthService {
       await newUser.save();
       userId = newUser.id;
 
-      const categories = await this.categoryServise.makeDefaultCategories(userId);
-      const payments = await this.paymentService.makeDefaultPayments(userId);
-      const now = dayjs();
-      await this.cashRecordService.makeRandomCashRecord(userId, categories, payments, now.year(), now.month() + 1);
+      await this.categoryServise.makeDefaultCategories(userId);
+      await this.paymentService.makeDefaultPayments(userId);
     }
 
     return userId;

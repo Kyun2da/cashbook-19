@@ -39,8 +39,8 @@ export default class CashRecordService {
     payments: Payment[],
     year: number,
     month: number,
-  ): Promise<CashRecord[]> {
-    const count = randomInt(10, 20);
+  ): Promise<void> {
+    const count = randomInt(30, 50);
     const records: CashRecord[] = [];
     const frequencies: Record<string, number> = {};
     while (records.length < count) {
@@ -79,7 +79,19 @@ export default class CashRecordService {
       records.push(record);
     }
 
-    return CashRecord.save(records.sort((a, b) => a.date.getTime() - b.date.getTime()));
+    records.sort((a, b) => a.date.getTime() - b.date.getTime());
+    CashRecord.createQueryBuilder().insert().values(records).execute();
+  }
+
+  async makeDummyIfTheMonthEmpty(userId: number, year: number, month: number): Promise<void> {
+    const startDate = dayjs(`${year}-${month}-1`, 'YYYY-M-D');
+    const endDate = startDate.endOf('month');
+    const count = await CashRecord.count({ where: { userId, date: Between(startDate.toDate(), endDate.toDate()) } });
+    if (count === 0) {
+      const categories = await Category.find({ where: { userId } });
+      const payments = await Payment.find({ where: { userId } });
+      await this.makeRandomCashRecord(userId, categories, payments, year, month);
+    }
   }
 
   async getRecords(userId: number, request: GetRecordsRequest): Promise<CashRecordDto[]> {
@@ -87,11 +99,15 @@ export default class CashRecordService {
     if (!userId) {
       const dummyUser = await User.findOne({ where: { githubId: constant.dummy.githubId } });
       realUserId = dummyUser.id;
+      const now = new Date();
+      if (now.getFullYear() >= request.year && now.getMonth() + 1 >= request.month) {
+        await this.makeDummyIfTheMonthEmpty(realUserId, request.year, request.month);
+      }
     }
     const startDate = dayjs(`${request.year}-${request.month}-1`, 'YYYY-M-D');
     const endDate = startDate.endOf('month');
     const records = await CashRecord.find({
-      where: { userId: realUserId, date: Between(startDate.toISOString(), endDate.toISOString()) },
+      where: { userId: realUserId, date: Between(startDate.toDate(), endDate.toDate()) },
     });
 
     return records.map((r) => new CashRecordDto(r));

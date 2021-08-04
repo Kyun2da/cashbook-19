@@ -35,22 +35,5 @@ export default async (): Promise<void> => {
       now.getFullYear(),
       now.getMonth() + 1,
     );
-  } else {
-    const startDate = dayjs().startOf('month');
-    const endDate = startDate.endOf('month');
-    const thisMonthRecordCount = await CashRecord.count({
-      where: { userId: foundDummyUser.id, date: Between(startDate.toISOString(), endDate.toISOString()) },
-    });
-    if (thisMonthRecordCount === 0) {
-      const categories = await Category.find({ where: { userId: foundDummyUser.id } });
-      const payments = await Payment.find({ where: { userId: foundDummyUser.id } });
-      await cashRecordService.makeRandomCashRecord(
-        foundDummyUser.id,
-        categories,
-        payments,
-        startDate.year(),
-        startDate.month() + 1,
-      );
-    }
   }
 };

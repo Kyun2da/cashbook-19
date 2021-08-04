@@ -3,3 +3,5 @@
 # [Choice] Node.js version: 16, 14, 12
 ARG VARIANT="16-buster"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
+
+RUN npm install --global npm
