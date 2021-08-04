@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity({ name: 'users' })
 export default class User extends BaseEntity {
-  @PrimaryGeneratedColumn({ name: 'name', type: 'bigint', unsigned: true })
+  @PrimaryGeneratedColumn({ name: 'id', type: 'bigint', unsigned: true })
   id: string;
 
   @Column({ name: 'github_id', type: 'bigint', unsigned: true, unique: true })
