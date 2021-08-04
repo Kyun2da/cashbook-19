@@ -42,7 +42,7 @@ export default class CashRecordService {
   ): Promise<CashRecord[]> {
     const count = randomInt(10, 20);
     const records: CashRecord[] = [];
-    const frequencies: { [key: string]: number } = {};
+    const frequencies: Record<string, number> = {};
     while (records.length < count) {
       const category = categories[randomInt(0, categories.length - 1)];
       const payment = payments[randomInt(0, payments.length - 1)];
@@ -63,7 +63,7 @@ export default class CashRecordService {
             frequencies[frequencyKey] += 1;
           }
         } else {
-          frequencies[frequencyKey] = 0;
+          frequencies[frequencyKey] = 1;
         }
       }
 

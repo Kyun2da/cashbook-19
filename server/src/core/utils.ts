@@ -5,5 +5,5 @@ export function randomInt(min: number, max: number): number {
 }
 
 export function randomColor(): string {
-  return [...Array(3)].map(() => Math.floor(randomInt(0, 255)).toString(16)).join('');
+  return [...Array(3)].map(() => Math.floor(randomInt(0, 255)).toString(16).padStart(2, '0')).join('');
 }
