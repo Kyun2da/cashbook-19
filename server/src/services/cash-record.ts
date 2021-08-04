@@ -80,7 +80,7 @@ export default class CashRecordService {
     }
 
     records.sort((a, b) => a.date.getTime() - b.date.getTime());
-    CashRecord.createQueryBuilder().insert().values(records).execute();
+    await CashRecord.createQueryBuilder().insert().values(records).execute();
   }
 
   async makeDummyIfTheMonthEmpty(userId: number, year: number, month: number): Promise<void> {
@@ -99,8 +99,7 @@ export default class CashRecordService {
     if (!userId) {
       const dummyUser = await User.findOne({ where: { githubId: constant.dummy.githubId } });
       realUserId = dummyUser.id;
-      const now = new Date();
-      if (now.getFullYear() >= request.year && now.getMonth() + 1 >= request.month) {
+      if (dayjs(`${request.year}-${request.month}`, 'YYYY-M').endOf('month').isBefore(dayjs())) {
         await this.makeDummyIfTheMonthEmpty(realUserId, request.year, request.month);
       }
     }
