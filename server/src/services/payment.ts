@@ -33,10 +33,10 @@ export default class PaymentService {
     const foundPayment = await Payment.findOne(request.paymentId);
 
     if (!foundPayment) {
-      throw new ApiError('해당 payment는 없습니다.', 404);
+      throw new ApiError('해당 결제수단은 없습니다.', 404);
     }
     if (foundPayment.userId !== userId) {
-      throw new ApiError('해당 payment에 권한이 없습니다.', 403);
+      throw new ApiError('해당 결제수단에 권한이 없습니다.', 403);
     }
 
     try {

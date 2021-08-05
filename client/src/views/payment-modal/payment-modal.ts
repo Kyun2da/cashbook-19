@@ -69,7 +69,7 @@ export default class PaymentModal extends UIComponent {
         alert: {
           error: true,
           title: '에러 발생',
-          message: '카테고리 이름은 1글자 이상 6글자 이하여야 합니다.',
+          message: '결제수단 이름은 1글자 이상 6글자 이하여야 합니다.',
         },
         paymentModal: null,
       });
