@@ -1,22 +1,11 @@
 {
-  "name": "myapp",
-  "version": "0.0.0",
+  "name": "cachbook-19-server",
+  "version": "1.0.0",
   "private": true,
   "main": "src/app.ts",
   "scripts": {
-    "start": "cross-env DEBUG=* NODE_ENV=development nodemon",
-    "prod": "pm2 start ecosystem.config.js"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "eslint . --fix",
-      "prettier --write"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "dev": "cross-env DEBUG=* NODE_ENV=development nodemon",
+    "start": "cross-env NODE_ENV=production nodemon"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -47,8 +36,6 @@
     "eslint": "^7.31.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
-    "husky": "^7.0.1",
-    "lint-staged": "^11.1.1",
     "nodemon": "^2.0.12",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"

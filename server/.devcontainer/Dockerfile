@@ -4,4 +4,4 @@
 ARG VARIANT="16-buster"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
 
-RUN npm install --global npm
+RUN npm install --global npm pm2

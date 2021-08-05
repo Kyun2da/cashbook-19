@@ -16,7 +16,7 @@ export default async (): Promise<void> => {
     username: config.username,
     password: config.password,
     database: config.database,
-    logging: true,
+    logging: process.env.NODE_ENV === 'development',
     synchronize: false,
     entities: [User, RefreshToken, Category, Payment, CashRecord],
   });
