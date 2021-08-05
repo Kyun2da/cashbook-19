@@ -25,6 +25,6 @@ export default class CategoryController {
     const deleteCategoryRequest = new DeleteCategoryRequest(req);
     await this.categoryService.deleteCategory(userId, deleteCategoryRequest);
 
-    return res.status(201).end();
+    return res.status(204).end();
   }
 }

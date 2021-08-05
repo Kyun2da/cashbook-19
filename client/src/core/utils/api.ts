@@ -258,3 +258,35 @@ export const deletePayment = async (store: State, paymentId: string): Promise<vo
     store.update({ loading: false });
   }
 };
+
+export const deleteRecord = async (store: State, recordId: string): Promise<void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.delete(`/api/v1/records/${recordId}`);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    store.update({
+      alert: {
+        success: true,
+        title: '삭제 성공',
+        message: '성공적으로 삭제를 완료하였습니다.',
+      },
+      records: store.get().records.filter((c) => c.id !== recordId),
+    });
+  } catch (e) {
+    if (e instanceof ResponseError) {
+      const { message } = (await e.response.json()).errors;
+      store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message,
+        },
+      });
+    }
+  } finally {
+    store.update({ loading: false });
+  }
+};

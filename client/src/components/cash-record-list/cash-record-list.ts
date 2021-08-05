@@ -16,7 +16,7 @@ export default function CashRecordList(groupByDate: CashRecordGroupByDate): stri
 
       rs.forEach((r) => {
         templates.push(`
-          <div class="${styles.record}">
+          <div class="${styles.record}" data-value="${r.id}">
             <div class="${styles['record-left']}">
               <div class="${styles.category}" style="background-color: ${r.category.color}">
                 ${r.category.name}
@@ -25,6 +25,9 @@ export default function CashRecordList(groupByDate: CashRecordGroupByDate): stri
             </div>
             <div class="${styles.payment}">${r.payment.name}</div>
             <div class="${styles['record-value']}">${r.value.toLocaleString()}원</div>
+            <button class="${styles['delete-btn']}">
+              삭제
+            </button>
           </div>
         `);
       });

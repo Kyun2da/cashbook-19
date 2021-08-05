@@ -17,6 +17,8 @@ import CashRecordDto from '@/dtos/model/cash-record';
 import { Between } from 'typeorm';
 
 import constant from '@/core/constant';
+import { ApiError } from '@/core/error';
+import DeleteRecordRequest from '@/dtos/request/cash-record/delete-record';
 
 interface DummyRecordName {
   [type: string]: {
@@ -123,5 +125,18 @@ export default class CashRecordService {
     cashRecord.value = request.value;
     await cashRecord.save();
     return new CashRecordDto(cashRecord);
+  }
+
+  async deleteRecord(userId: string, request: DeleteRecordRequest): Promise<void> {
+    const foundRecord = await CashRecord.findOne(request.recordId);
+
+    if (!foundRecord) {
+      throw new ApiError('해당 레코드는 없습니다.', 404);
+    }
+    if (foundRecord.userId !== userId) {
+      throw new ApiError('해당 레코드에 권한이 없습니다.', 403);
+    }
+
+    await CashRecord.remove(foundRecord);
   }
 }

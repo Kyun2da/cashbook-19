@@ -15,4 +15,6 @@ const cashRecordService = Container.get(CashRecordController);
 router.get('/', invalidRequest(...GetRecordsRequest.validators), asyncWrapper(cashRecordService.getRecords));
 router.post('/', auth, invalidRequest(...NewRecordRequest.validators), asyncWrapper(cashRecordService.addRecord));
 
+router.delete('/:id', auth, asyncWrapper(cashRecordService.deleteRecord));
+
 export default router;
