@@ -1,3 +1,5 @@
+type CashType = 'income' | 'expenditure';
+
 interface RouterState {
   pathname: string;
   search: string;
@@ -11,7 +13,7 @@ interface User {
 
 interface Category {
   id: string;
-  type: 'income' | 'expenditure';
+  type: CashType;
   name: string;
   color: string;
 }
@@ -38,7 +40,7 @@ interface DateState {
 }
 
 interface MainState {
-  cashType: 'income' | 'expenditure';
+  cashType: CashType;
   income: boolean;
   expenditure: boolean;
 }
