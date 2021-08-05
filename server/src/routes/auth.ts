@@ -4,6 +4,7 @@ import { Container } from 'typedi';
 import asyncWrapper from '@/middlewares/async-wrapper';
 import AuthController from '@/controllers/auth';
 
+import { oauthError } from '@/middlewares/oauth';
 import invalidRequest from '@/middlewares/invalid-request';
 import GithubRequest from '@/dtos/request/oauth/github';
 
@@ -13,6 +14,7 @@ const authController = Container.get(AuthController);
 router.get('/github/login', authController.githubLogin);
 router.get(
   '/github/callback',
+  oauthError,
   invalidRequest(...GithubRequest.validators),
   asyncWrapper(authController.githubCallback),
 );
