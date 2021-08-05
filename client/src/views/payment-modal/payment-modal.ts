@@ -17,11 +17,8 @@ export default class PaymentModal extends UIComponent {
 
   template(state: StoreState): string {
     if (!state.paymentModal) {
-      document.body.classList.remove('payment-modal');
       return '';
     }
-
-    document.body.classList.add('payment-modal');
 
     return `
       <div class="${styles['payment-modal']}">
@@ -62,7 +59,7 @@ export default class PaymentModal extends UIComponent {
   }
 
   async handleOkBtnClick(): Promise<void> {
-    const name = (this.targetElement.querySelector('input[name="name"]') as HTMLInputElement).value;
+    const name = (this.targetElement.querySelector('input[name="name"]') as HTMLInputElement).value.trim();
 
     if (name.length === 0 || name.length >= 6) {
       this.store.update({

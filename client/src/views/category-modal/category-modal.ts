@@ -17,11 +17,8 @@ export default class CategoryModal extends UIComponent {
 
   template(state: StoreState): string {
     if (!state.categoryModal) {
-      document.body.classList.remove('category-modal');
       return '';
     }
-
-    document.body.classList.add('category-modal');
 
     return `
       <div class="${styles['category-modal']}">
@@ -76,7 +73,7 @@ export default class CategoryModal extends UIComponent {
   async handleOkBtnClick(): Promise<void> {
     const color = (this.targetElement.querySelector('input[name="color"]') as HTMLInputElement).value.substr(1);
     const type = (this.targetElement.querySelector('input[name="type"]:checked') as HTMLInputElement).value;
-    const name = (this.targetElement.querySelector('input[name="name"]') as HTMLInputElement).value;
+    const name = (this.targetElement.querySelector('input[name="name"]') as HTMLInputElement).value.trim();
 
     if (name.length === 0 || name.length >= 6) {
       this.store.update({
