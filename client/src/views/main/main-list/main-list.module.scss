@@ -17,6 +17,7 @@
 .filter {
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   &.active {
     color: $primary3;
