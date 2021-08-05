@@ -241,7 +241,7 @@ export const deletePayment = async (store: State, paymentId: string): Promise<vo
         title: '삭제 성공',
         message: '성공적으로 삭제를 완료하였습니다.',
       },
-      categories: store.get().categories.filter((c) => c.id !== paymentId),
+      payments: store.get().payments.filter((c) => c.id !== paymentId),
     });
   } catch (e) {
     if (e instanceof ResponseError) {
