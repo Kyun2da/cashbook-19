@@ -15,7 +15,7 @@
 .input {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   border-right: 1px solid $placeholder;
   padding: 0 16px;
   margin: 0 auto;
@@ -61,7 +61,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 30px;
   color: $label;
 }
 
@@ -82,7 +81,7 @@
 
 .value {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   input {
     text-align: right;
