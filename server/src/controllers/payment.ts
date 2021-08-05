@@ -25,6 +25,6 @@ export default class PaymentController {
     const deletePaymentRequest = new DeletePaymentRequest(req);
     await this.paymentService.deletePayment(userId, deletePaymentRequest);
 
-    return res.status(201).end();
+    return res.status(204).end();
   }
 }
