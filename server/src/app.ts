@@ -7,14 +7,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import loader from '@/loaders';
+import config from '@/config';
 
 async function startServer() {
   const app = express();
 
   await loader.init({ expressApp: app });
 
-  app.listen(3000, () => {
-    console.log('The application is listening on port 3000!');
+  app.listen(config.port, () => {
+    console.log(`The application is listening on port ${config.port}!`);
   });
 }
 
