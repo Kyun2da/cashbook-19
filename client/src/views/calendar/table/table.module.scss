@@ -73,10 +73,6 @@
   &:not(.blank):hover {
     background-color: #f5f5f5;
   }
-}
-
-.date {
-  cursor: pointer;
 
   &.today {
     .dayNum {
@@ -91,6 +87,10 @@
       color: white;
     }
   }
+}
+
+.date {
+  cursor: pointer;
 
   &.selection {
     background-color: $grey3;
