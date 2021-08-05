@@ -52,7 +52,7 @@
 }
 
 .date {
-  width: 120px;
+  width: 200px;
 }
 
 .select {
@@ -98,6 +98,7 @@
   border-radius: 10px;
   color: $primary1;
   cursor: pointer;
+  transition: color ease 300ms, background-color ease 300ms;
 
   &:hover {
     color: $off-white;

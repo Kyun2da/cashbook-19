@@ -5,11 +5,13 @@ import UIComponent from '@/core/ui/ui-component';
 import { deleteCategory, deletePayment, enrollRecord } from '@/core/utils/api';
 
 import colors from '@/core/styles/color.module.scss';
+import dayjs from 'dayjs';
 import styles from './form.module.scss';
 
 export default class From extends UIComponent {
   constructor(router: Router, store: State) {
     super(router, store);
+    this.handleToggleContext = this.handleToggleContext.bind(this);
     this.handleCategorySelectorClick = this.handleCategorySelectorClick.bind(this);
     this.handlePaymentSelectorClick = this.handlePaymentSelectorClick.bind(this);
     this.toggleCashTypeContainer = this.toggleCashTypeContainer.bind(this);
@@ -26,11 +28,9 @@ export default class From extends UIComponent {
     return '/';
   }
 
-  template(state: StoreState): string {
-    const { main, categories, payments } = state;
-
-    const categoriesSelector = categories
-      .filter((item) => item.type === main.cashType)
+  categorySelectorTemplate(categories: Category[], type: CashType): string {
+    return categories
+      .filter((item) => item.type === type)
       .map(
         (category) => `
           <div class="${styles['context-container']}">
@@ -39,85 +39,97 @@ export default class From extends UIComponent {
               <div class="value" data-value="${category.id}">${category.name}</div>
             </div>
             <i class="wci-close"></i>
-          </div>`,
+          </div>
+        `,
       )
       .join('');
+  }
 
-    const paymentsSelector = payments
+  paymentSelectorTemplate(payments: Payment[]): string {
+    return payments
       .map(
         (payment) => `
-        <div class="${styles['context-container']}">
-          <div>
-            <div class="value" data-value="${payment.id}">${payment.name}</div>
+          <div class="${styles['context-container']}">
+            <div>
+              <div class="value" data-value="${payment.id}">${payment.name}</div>
+            </div>
+            <i class="wci-close"></i>
           </div>
-          <i class="wci-close"></i>
-        </div>`,
+        `,
       )
       .join('');
+  }
 
+  template(state: StoreState): string {
+    const { main, categories, payments } = state;
     const moneyBtn = main.cashType === 'income' ? '<i class="wci-plus"></i>' : '<i class="wci-dash"></i>';
 
     return `
-        <form class="${styles.form}">
-          <div class="${styles['payment-type']}">
-            <button class="income" type="button">수입</button>
-            <button class="expenditure" type="button">지출</button>
+      <form class="${styles.form}">
+        <div class="${styles['payment-type']}">
+          <button class="income" type="button">수입</button>
+          <button class="expenditure" type="button">지출</button>
+        </div>
+        <div class="${styles.input}">
+          <label for="date">일자</label>
+          <input class="${styles.date}" name="date" value="${dayjs().format('YYYY-MM-DD')}" type="date" />
+        </div>
+        <div class="${styles.input}">
+          <label for="category">분류</label>
+          <div class="${styles.select} ${styles['category-selector']}">
+            <input class="${styles['category-input']}" name="category" placeholder="선택하세요" disabled/>
+            <i class="wci-chevron-down"></i>
           </div>
-          <div class="${styles.input}">
-            <label for="date">일자</label>
-            <input class=${styles.date} name="date" maxlength="8" />
-          </div>
-          <div class="${styles.input}">
-            <label for="category">분류</label>
-            <div class="${styles.select} ${styles['category-selector']}">
-              <input class="${styles['category-input']}" name="category" placeholder="선택하세요" disabled/>
-              <i class="wci-chevron-down"></i>
-            </div>
-            <div class="${styles['category-context']}">
-              ${categoriesSelector}
-              <div class="${styles['context-container']}" value="add">
-                <div>
-                  <div class="value">추가하기</div>
-                </div>
+          <div class="${styles['category-context']}">
+            ${this.categorySelectorTemplate(categories, main.cashType)}
+            <div class="${styles['context-container']}" value="add">
+              <div>
+                <div class="value">추가하기</div>
               </div>
             </div>
           </div>
-          <div class="${styles.input}">
-            <label for="content">내용</label>
-            <input class="${styles['content-input']}" name="content" placeholder="입력하세요"/>
+        </div>
+        <div class="${styles.input}">
+          <label for="content">내용</label>
+          <input class="${styles['content-input']}" name="content" placeholder="입력하세요"/>
+        </div>
+        <div class="${styles.input}">
+          <label for="payment">결제수단</label>
+          <div class="${styles.select} ${styles['payment-selector']}">
+            <input class="${styles['payment-input']}" name="payment" placeholder="선택하세요" disabled/>
+            <i class="wci-chevron-down"></i>
           </div>
-          <div class="${styles.input}">
-            <label for="payment">결제수단</label>
-            <div class="${styles.select} ${styles['payment-selector']}">
-              <input class="${styles['payment-input']}" name="payment" placeholder="선택하세요" disabled/>
-              <i class="wci-chevron-down"></i>
-            </div>
-            <div class="${styles['payment-context']}">
-              ${paymentsSelector}
-              <div class="${styles['context-container']}" value="add">
-                  <div class="value">추가하기</div>
-              </div>
-            </div>
-          </div>
-          <div class="${styles.input}">
-            <label for="value">금액</label>
-            <div class="${styles['value-container']}">
-              ${moneyBtn}
-              <div class="${styles.value}">
-                <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
-                원
-              </div>
+          <div class="${styles['payment-context']}">
+            ${this.paymentSelectorTemplate(payments)}
+            <div class="${styles['context-container']}" value="add">
+                <div class="value">추가하기</div>
             </div>
           </div>
-          <button class="${styles.button}">
-            <i class="wci-check"></i>
-          </button>
-        </form>
+        </div>
+        <div class="${styles.input}">
+          <label for="value">금액</label>
+          <div class="${styles['value-container']}">
+            ${moneyBtn}
+            <div class="${styles.value}">
+              <input class="${styles['value-input']}" name="value" placeholder="입력하세요"/>
+              <div>원</div>
+            </div>
+          </div>
+        </div>
+        <button class="${styles.button}">
+          <i class="wci-check"></i>
+        </button>
+      </form>
     `;
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    return true;
+    switch (true) {
+      case prevState.alert !== nextState.alert:
+        return false;
+      default:
+        return true;
+    }
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
@@ -136,6 +148,22 @@ export default class From extends UIComponent {
       cashTypeContainer.querySelector('.income').classList.add(styles.active);
     } else {
       cashTypeContainer.querySelector('.expenditure').classList.add(styles.active);
+    }
+
+    window.removeEventListener('click', this.handleToggleContext);
+    window.addEventListener('click', this.handleToggleContext);
+  }
+
+  handleToggleContext(e: Event): void {
+    const parent = this.targetElement;
+    const { target } = e;
+    const categorySelector = parent.querySelector(`.${styles['category-selector']}`);
+    const paymentSelector = parent.querySelector(`.${styles['payment-selector']}`);
+    if (!categorySelector.contains(target as HTMLElement) && !paymentSelector.contains(target as HTMLElement)) {
+      const categoryContext = parent.querySelector(`.${styles['category-context']}`);
+      const paymentContext = parent.querySelector(`.${styles['payment-context']}`);
+      categoryContext.classList.remove(styles.active);
+      paymentContext.classList.remove(styles.active);
     }
   }
 
@@ -261,7 +289,6 @@ export default class From extends UIComponent {
         });
       }
     } else if (paymentContainer.textContent === '추가하기') {
-      console.log('추가하기');
       if (!this.store.get().user) {
         e.preventDefault();
         this.store.update({
@@ -291,8 +318,34 @@ export default class From extends UIComponent {
     const title = (parent.querySelector('input[name="content"]') as HTMLInputElement).value;
     const paymentId = (parent.querySelector('input[name="payment"]') as HTMLInputElement).dataset.value;
     const value = parseInt((parent.querySelector('input[name="value"]') as HTMLInputElement).value, 10);
-    const data: NewCashRecordRequest = { date, categoryId, title, paymentId, value };
+    if (!this.store.get().user) {
+      this.store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message: '로그인이 필요합니다.',
+        },
+      });
+    } else if (
+      !date ||
+      !categoryId ||
+      !title ||
+      !paymentId ||
+      !value ||
+      !dayjs(date, 'YYYY-MM-DD', 'ko', true).isValid()
+    ) {
+      this.store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message: '레코드를 등록하려면 모든 내용을 작성해야 합니다.',
+        },
+      });
+    } else {
+      console.log(date, categoryId, title, paymentId, value);
+      const data: NewCashRecordRequest = { date, categoryId, title, paymentId, value };
 
-    await enrollRecord(this.store, data);
+      await enrollRecord(this.store, data);
+    }
   }
 }
