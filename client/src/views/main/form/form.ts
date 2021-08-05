@@ -2,7 +2,7 @@ import State from '@/core/ui/state';
 import Router from '@/core/utils/router';
 
 import UIComponent from '@/core/ui/ui-component';
-import { deleteCategory, enrollRecord } from '@/core/utils/api';
+import { deleteCategory, deletePayment, enrollRecord } from '@/core/utils/api';
 
 import colors from '@/core/styles/color.module.scss';
 import styles from './form.module.scss';
@@ -233,11 +233,50 @@ export default class From extends UIComponent {
     const parent = this.targetElement;
     const paymentSelector = parent.querySelector(`.${styles['payment-selector']}`);
     const paymentContext = parent.querySelector(`.${styles['payment-context']}`);
+    const paymentContainer = target.closest(`.${styles['context-container']}`).querySelector('.value') as HTMLElement;
+    const paymentInput = paymentSelector.firstElementChild as HTMLInputElement;
     if (target.classList.contains('wci-close')) {
-      console.log('삭제');
+      if (!this.store.get().user) {
+        e.preventDefault();
+        this.store.update({
+          alert: {
+            error: true,
+            title: '에러 발생',
+            message: '로그인이 필요합니다!',
+          },
+        });
+      } else {
+        this.store.update({
+          alert: {
+            title: `정말 ${paymentContainer.textContent} 결제수단을 삭제하시겠습니까?`,
+            okMessage: '삭제',
+            okColor: colors.error,
+            callback: async (ok: boolean) => {
+              if (ok) {
+                await deletePayment(this.store, paymentContainer.dataset.value);
+              }
+            },
+            cancelable: true,
+          },
+        });
+      }
+    } else if (paymentContainer.textContent === '추가하기') {
+      console.log('추가하기');
+      if (!this.store.get().user) {
+        e.preventDefault();
+        this.store.update({
+          alert: {
+            error: true,
+            title: '에러 발생',
+            message: '로그인이 필요합니다!',
+          },
+        });
+      } else {
+        this.store.update({
+          paymentModal: true,
+        });
+      }
     } else {
-      const paymentContainer = target.closest(`.${styles['context-container']}`).querySelector('.value') as HTMLElement;
-      const paymentInput = paymentSelector.firstElementChild as HTMLInputElement;
       paymentInput.value = paymentContainer.textContent;
       paymentInput.setAttribute('data-value', paymentContainer.dataset.value);
       paymentContext.classList.toggle(styles.active);

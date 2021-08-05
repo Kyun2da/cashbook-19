@@ -22,6 +22,7 @@ import DateObserver from '@/observers/date';
 import { getRecords, init } from './core/utils/api';
 import Alert from './views/alert';
 import CategoryModal from './views/category-modal';
+import PaymentModal from './views/payment-modal';
 
 dayjs.locale('ko');
 
@@ -38,6 +39,7 @@ const statList = new StatList(null, store);
 const loading = new Loading(null, store);
 const alert = new Alert(null, store);
 const categoryModal = new CategoryModal(null, store);
+const paymentModal = new PaymentModal(null, store);
 
 store.subscribe(header);
 store.subscribe(form);
@@ -49,6 +51,7 @@ store.subscribe(statList);
 store.subscribe(loading);
 store.subscribe(alert);
 store.subscribe(categoryModal);
+store.subscribe(paymentModal);
 
 const dateObserver = new DateObserver(store);
 store.subscribe(dateObserver);

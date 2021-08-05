@@ -126,7 +126,7 @@ export const enrollRecord = async (store: State, data: NewCashRecordRequest): Pr
 export const enrollCategory = async (store: State, data: NewCategoryRequest): Promise<Category | void> => {
   store.update({ loading: true });
   try {
-    const response = await api.post('/api/v1/category', data);
+    const response = await api.post('/api/v1/categories', data);
     if (!response.ok) {
       throw new ResponseError(response);
     }
@@ -162,7 +162,7 @@ export const enrollCategory = async (store: State, data: NewCategoryRequest): Pr
 export const deleteCategory = async (store: State, categoryId: string): Promise<void> => {
   store.update({ loading: true });
   try {
-    const response = await api.delete(`/api/v1/category/${categoryId}`);
+    const response = await api.delete(`/api/v1/categories/${categoryId}`);
     if (!response.ok) {
       throw new ResponseError(response);
     }
@@ -174,6 +174,74 @@ export const deleteCategory = async (store: State, categoryId: string): Promise<
         message: '성공적으로 삭제를 완료하였습니다.',
       },
       categories: store.get().categories.filter((c) => c.id !== categoryId),
+    });
+  } catch (e) {
+    if (e instanceof ResponseError) {
+      const { message } = (await e.response.json()).errors;
+      store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message,
+        },
+      });
+    }
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const enrollPayment = async (store: State, data: NewPaymentRequest): Promise<Payment | void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.post('/api/v1/payments', data);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    const { payments } = store.get();
+    const newPayment = (await response.json()) as Payment;
+    store.update({
+      alert: {
+        success: true,
+        title: '등록 성공',
+        message: '성공적으로 등록을 완료하였습니다.',
+      },
+      paymentModal: null,
+      payments: [...payments, newPayment],
+    });
+  } catch (e) {
+    if (e instanceof ResponseError) {
+      const { message } = (await e.response.json()).errors;
+      store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message,
+        },
+        paymentModal: null,
+      });
+    }
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const deletePayment = async (store: State, paymentId: string): Promise<void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.delete(`/api/v1/payments/${paymentId}`);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    store.update({
+      alert: {
+        success: true,
+        title: '삭제 성공',
+        message: '성공적으로 삭제를 완료하였습니다.',
+      },
+      payments: store.get().payments.filter((c) => c.id !== paymentId),
     });
   } catch (e) {
     if (e instanceof ResponseError) {

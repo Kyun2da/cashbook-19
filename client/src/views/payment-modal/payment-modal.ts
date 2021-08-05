@@ -1,10 +1,10 @@
 import State from '@/core/ui/state';
 import UIComponent from '@/core/ui/ui-component';
-import { enrollCategory } from '@/core/utils/api';
+import { enrollPayment } from '@/core/utils/api';
 import Router from '@/core/utils/router';
-import styles from './category-modal.module.scss';
+import styles from './payment-modal.module.scss';
 
-export default class CategoryModal extends UIComponent {
+export default class PaymentModal extends UIComponent {
   constructor(router: Router, store: State) {
     super(router, store);
     this.handleCancelBtnClick = this.handleCancelBtnClick.bind(this);
@@ -12,33 +12,21 @@ export default class CategoryModal extends UIComponent {
   }
 
   get targetElement(): HTMLElement {
-    return document.querySelector('#category-modal');
+    return document.querySelector('#payment-modal');
   }
 
   template(state: StoreState): string {
-    if (!state.categoryModal) {
+    if (!state.paymentModal) {
       return '';
     }
 
     return `
-      <div class="${styles['category-modal']}">
-        <div class="${styles['category-modal-container']}">
-          <div class="${styles.title}">카테고리를 등록해 주세요.</div>
+      <div class="${styles['payment-modal']}">
+        <div class="${styles['payment-modal-container']}">
+          <div class="${styles.title}">결제수단을 등록해 주세요.</div>
           <div>
             <div class="${styles['input-container']}">
-              <label for="color">색상 : </label>
-              <input type="color" name="color"
-              value="#f6b73c"/>
-            </div>
-            <div class="${styles['input-container']}">
-              <label for="type">카테고리 타입 : </label>
-              <input type="radio" id="income" name="type" value="income" checked>
-              <label for="income">수입</label>
-              <input type="radio" id="expenditure" name="type" value="expenditure">
-              <label for="expenditure">지출</label>
-            </div>
-            <div class="${styles['input-container']}">
-              <label for="name">카테고리 이름 : </label>
+              <label for="name">결제수단 이름 : </label>
               <input type="text" name="name" placeholder="5글자이하" maxlength="5"/>
             </div>
           </div>
@@ -52,7 +40,7 @@ export default class CategoryModal extends UIComponent {
   }
 
   addEvent(state: StoreState, parent: HTMLElement): void {
-    if (!state.categoryModal) {
+    if (!state.paymentModal) {
       return;
     }
 
@@ -61,18 +49,16 @@ export default class CategoryModal extends UIComponent {
   }
 
   shouldUpdate(prevState: StoreState, nextState: StoreState): boolean {
-    return prevState.categoryModal !== nextState.categoryModal;
+    return prevState.paymentModal !== nextState.paymentModal;
   }
 
   handleCancelBtnClick(): void {
     this.store.update({
-      categoryModal: null,
+      paymentModal: null,
     });
   }
 
   async handleOkBtnClick(): Promise<void> {
-    const color = (this.targetElement.querySelector('input[name="color"]') as HTMLInputElement).value.substr(1);
-    const type = (this.targetElement.querySelector('input[name="type"]:checked') as HTMLInputElement).value;
     const name = (this.targetElement.querySelector('input[name="name"]') as HTMLInputElement).value.trim();
 
     if (name.length === 0 || name.length >= 6) {
@@ -80,12 +66,12 @@ export default class CategoryModal extends UIComponent {
         alert: {
           error: true,
           title: '에러 발생',
-          message: '카테고리 이름은 1글자 이상 6글자 이하여야 합니다.',
+          message: '결제수단 이름은 1글자 이상 6글자 이하여야 합니다.',
         },
-        categoryModal: null,
+        paymentModal: null,
       });
     } else {
-      await enrollCategory(this.store, { color, type: type as 'income' | 'expenditure', name });
+      await enrollPayment(this.store, { name });
     }
   }
 }

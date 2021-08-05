@@ -12,4 +12,8 @@ interface NewCategoryRequest {
   color: string;
 }
 
-type RequestType = NewCashRecordRequest | NewCategoryRequest;
+interface NewPaymentRequest {
+  name: string;
+}
+
+type RequestType = NewCashRecordRequest | NewCategoryRequest | NewPaymentRequest;
