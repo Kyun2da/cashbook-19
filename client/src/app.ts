@@ -3,6 +3,7 @@ import '@/core/styles/global.scss';
 import '@/assets/fonts/woowahan-cashbook-icons.css';
 
 import 'dayjs/locale/ko';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 
 import State from '@/core/ui/state';
@@ -25,6 +26,8 @@ import CategoryModal from './views/category-modal';
 import PaymentModal from './views/payment-modal';
 
 dayjs.locale('ko');
+
+dayjs.extend(customParseFormat);
 
 const store = new State();
 const router = new Router(store);

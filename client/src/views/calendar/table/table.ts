@@ -48,7 +48,7 @@ export default class Table extends UIComponent {
         const recordsAndSum = groupByDate[key];
         if (!recordsAndSum) {
           return `
-            <div class="${styles.block}">
+            <div class="${classNames(styles.block, { [styles.today]: isToday })}">
               <div class="${styles.dayNum}">${day}</div>
             </div>
           `;

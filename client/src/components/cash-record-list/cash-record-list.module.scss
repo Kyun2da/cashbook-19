@@ -29,6 +29,10 @@
   align-items: center;
   border-bottom: 1px solid $line;
   font-size: 1rem;
+
+  &:hover {
+    background-color: $grey3;
+  }
 }
 
 .record-left {

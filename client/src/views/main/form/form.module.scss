@@ -15,7 +15,7 @@
 .input {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   border-right: 1px solid $placeholder;
   padding: 0 16px;
   margin: 0 auto;
@@ -52,7 +52,7 @@
 }
 
 .date {
-  width: 120px;
+  width: 200px;
 }
 
 .select {
@@ -61,7 +61,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 30px;
   color: $label;
 }
 
@@ -82,7 +81,7 @@
 
 .value {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   input {
     text-align: right;
@@ -99,6 +98,7 @@
   border-radius: 10px;
   color: $primary1;
   cursor: pointer;
+  transition: color ease 300ms, background-color ease 300ms;
 
   &:hover {
     color: $off-white;

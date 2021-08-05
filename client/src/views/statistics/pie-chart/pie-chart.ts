@@ -36,8 +36,8 @@ export default class PieChart extends UIComponent {
 
     // 카테고리별 지출값 묶어주기
     records.forEach((record) => {
-      const isExpenditure = categories[record.categoryId - 1].type === 'expenditure';
-      const category = categories[record.categoryId - 1].name;
+      const isExpenditure = record.category.type === 'expenditure';
+      const category = record.category.name;
       if (isExpenditure) {
         total += record.value;
         const index = donutRecord.findIndex((item) => item.name === category);
