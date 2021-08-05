@@ -43,6 +43,7 @@ module.exports = merge(common, {
         env: '',
       },
       hash: true,
+      favicon: 'src/assets/images/cashbook-19.png',
     }),
     new MiniCssExtractPlugin({ filename: '[name].css', chunkFilename: '[id].css' }),
   ],
