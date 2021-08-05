@@ -43,6 +43,10 @@ interface MainState {
   expenditure: boolean;
 }
 
+interface CalendarState {
+  selection?: Date;
+}
+
 interface AlertState {
   title?: string;
   okMessage?: string;
@@ -66,6 +70,7 @@ type StoreStateValue =
   | MainState
   | boolean
   | AlertState
+  | CalendarState
   | StatPageState;
 
 interface StoreState extends Record<string, StoreStateValue> {
@@ -76,6 +81,7 @@ interface StoreState extends Record<string, StoreStateValue> {
   records: CashRecord[];
   date: DateState;
   main: MainState;
+  calendar: CalendarState;
   loading: boolean;
   alert?: AlertState;
   statPage: StatPageState;

@@ -1,13 +1,24 @@
-import UIComponent from '@/core/ui/ui-component';
+/* eslint-disable indent */
 import dayjs from 'dayjs';
+
+import UIComponent from '@/core/ui/ui-component';
+import Router from '@/core/utils/router';
+import State from '@/core/ui/state';
 
 import { groupingCashRecordsByDate, cashRecordValueSum } from '@/core/utils/functions';
 
-import styles from './calendar.module.scss';
+import classNames from 'classnames';
+import styles from './table.module.scss';
 
-export default class Calendar extends UIComponent {
+export default class Table extends UIComponent {
+  constructor(router: Router, store: State) {
+    super(router, store);
+
+    this.handleDayClick = this.handleDayClick.bind(this);
+  }
+
   get targetElement(): HTMLElement {
-    return document.getElementById('calendar');
+    return document.getElementById('table');
   }
 
   get targetPathname(): string {
@@ -19,16 +30,26 @@ export default class Calendar extends UIComponent {
     return true;
   }
 
-  cellTemplates(year: number, month: number, dayCount: number, groupByDate: CashRecordGroupByDate): string {
+  cellTemplates(
+    year: number,
+    month: number,
+    dayCount: number,
+    groupByDate: CashRecordGroupByDate,
+    selection: Date,
+  ): string {
+    const now = new Date();
     return [...Array(dayCount)]
       .map((_, index) => {
-        const date = index + 1;
-        const key = dayjs(`${year}-${month}-${date}`, 'YYYY-M-D').format('YYYY-MM-DD ddd');
+        const day = index + 1;
+        const date = dayjs(`${year}-${month}-${day}`, 'YYYY-M-D');
+        const isToday = date.isSame(now, 'day');
+        const isSelection = selection && date.isSame(selection, 'day');
+        const key = date.format('YYYY-MM-DD ddd');
         const recordsAndSum = groupByDate[key];
         if (!recordsAndSum) {
           return `
             <div class="${styles.block}">
-              <div class="${styles.dayNum}">${date}</div>
+              <div class="${styles.dayNum}">${day}</div>
             </div>
           `;
         }
@@ -37,8 +58,13 @@ export default class Calendar extends UIComponent {
         const total = sum.income + sum.expenditure;
 
         return `
-          <div class="${styles.block}">
-            <div class="${styles.dayNum}">${date}</div>
+          <div class="${classNames(
+            styles.block,
+            styles.date,
+            { [styles.today]: isToday },
+            { [styles.selection]: isSelection },
+          )}" data-date="${date.toISOString()}">
+            <div class="${styles.dayNum}">${day}</div>
             <div class="${styles.income}">${sum.income > 0 ? sum.income.toLocaleString() : ''}</div>
             <div class="${styles.expenditure}">${sum.expenditure > 0 ? sum.expenditure.toLocaleString() : ''}</div>
             <div class="${styles.total}">${total.toLocaleString()}</div>
@@ -49,11 +75,12 @@ export default class Calendar extends UIComponent {
   }
 
   blankTemplate(num: number): string {
-    return Array(num).fill(`<div class="${styles.block}"></div>`).join('');
+    return Array(num).fill(`<div class="${styles.block} ${styles.blank}"></div>`).join('');
   }
 
   template(state: StoreState): string {
     const { records, date } = state;
+    const { selection } = state.calendar;
     const totalSum = cashRecordValueSum(records);
     const groupByDate = groupingCashRecordsByDate(records);
     const dayNum = new Date(date.year, date.month, 0).getDate();
@@ -72,7 +99,7 @@ export default class Calendar extends UIComponent {
       </div>
       <div class="${styles.calendar}">
         ${this.blankTemplate(frontBlankNum)}
-        ${this.cellTemplates(date.year, date.month, dayNum, groupByDate)}
+        ${this.cellTemplates(date.year, date.month, dayNum, groupByDate, selection)}
         ${this.blankTemplate(backBlankNum)}
       </div>
       <div class="${styles.summary}">
@@ -83,5 +110,24 @@ export default class Calendar extends UIComponent {
         <div>총계 ${(totalSum.income + totalSum.expenditure).toLocaleString()}</div>
       </div>
     `;
+  }
+
+  addEvent(state: StoreState, parent: HTMLElement): void {
+    parent.querySelector(`.${styles.calendar}`).addEventListener('click', this.handleDayClick);
+  }
+
+  handleDayClick(e: Event): void {
+    const target = e.target as HTMLElement;
+    const cell = target.closest<HTMLElement>(`.${styles.date}`);
+    if (!cell) {
+      return;
+    }
+
+    const date = new Date(cell.dataset.date);
+    this.store.update({
+      calendar: {
+        selection: date,
+      },
+    });
   }
 }

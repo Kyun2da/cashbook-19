@@ -1,4 +1,4 @@
-@import '../../core/styles/color.scss';
+@import '@/core/styles/color.scss';
 
 .week {
   display: flex;
@@ -29,18 +29,32 @@
   border-radius: 10px;
   border-collapse: collapse;
   border-spacing: 0;
+  overflow: hidden;
 
   > div {
     border-left: 1px solid $line;
     border-top: 1px solid $line;
   }
 
-  :nth-child(7n + 1) {
-    border-left: none;
-  }
-
+  // 맨 윗줄
   :nth-child(n):nth-child(-n + 7) {
     border-top: none;
+  }
+
+  // 일요일
+  :nth-child(7n + 1) {
+    border-left: none;
+
+    .dayNum {
+      color: #f44336;
+    }
+  }
+
+  // 토요일
+  :nth-child(7n) {
+    .dayNum {
+      color: #3f51b5;
+    }
   }
 }
 
@@ -56,8 +70,32 @@
   width: 120px;
   height: 120px;
 
-  &:hover {
+  &.blank {
+    background-color: #e9e9e9;
+  }
+
+  &:not(.blank):hover {
     background-color: #f5f5f5;
+  }
+}
+
+.date {
+  &.today {
+    border: 1px solid #f44336;
+
+    .dayNum {
+      font-size: 1.2em;
+      text-decoration: underline;
+    }
+  }
+
+  &.selection {
+    background-color: $primary2;
+
+    .dayNum {
+      color: $title-active;
+      font-size: 1.2em;
+    }
   }
 }
 
