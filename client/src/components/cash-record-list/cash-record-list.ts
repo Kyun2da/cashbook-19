@@ -32,7 +32,7 @@ export default function CashRecordList(groupByDate: CashRecordGroupByDate): stri
       templates.push(`
         <div class="${styles['daily-summary']}">
           <div class="${styles.date}">${date}</div>
-          <div class="${styles.total}">${total.join(', ')}</div>
+          <div class="${styles.total}">${total.join(' ')}</div>
         </div>
       `);
 
