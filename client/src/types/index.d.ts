@@ -88,6 +88,7 @@ interface StoreState {
   loading: boolean;
   alert?: AlertState;
   categoryModal: boolean;
+  paymentModal: boolean;
   statPage: StatPageState;
 }
 

@@ -1,0 +1,60 @@
+@import '@/core/styles/color.scss';
+
+.payment-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  min-height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.payment-modal-container {
+  width: fit-content;
+  padding: 40px;
+  background-color: $off-white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.2rem;
+  margin-bottom: 24px;
+}
+
+.input-container {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    &.cancel {
+      color: $body;
+    }
+
+    &.ok {
+      margin-left: auto;
+      font-weight: bold;
+      color: $primary1;
+    }
+  }
+}
