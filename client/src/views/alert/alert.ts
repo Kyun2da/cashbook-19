@@ -1,4 +1,6 @@
 import UIComponent from '@/core/ui/ui-component';
+
+import colors from '@/core/styles/color.module.scss';
 import styles from './alert.module.scss';
 
 export default class Alert extends UIComponent {
@@ -12,16 +14,30 @@ export default class Alert extends UIComponent {
       return '';
     }
 
-    const { title, okMessage, cancelable, okColor } = state.alert;
+    const {
+      error,
+      success,
+      title = '알림',
+      message,
+      okMessage = '확인',
+      cancelable,
+      okColor = colors.primary1,
+    } = state.alert;
     document.body.classList.add('alert');
-    const cancelButton = cancelable ? `<button class="${styles.cancel}" type="button">취소</button>` : '';
+    const cancelButtonTemplate = cancelable ? `<button class="${styles.cancel}" type="button">취소</button>` : '';
+    const herlTemplate = error ? `<div class="${styles.herl}">헐</div>` : '';
+    const successTemplate = success ? `<div class="${styles.success}">성공</div>` : '';
+    const messageTemplate = message ? `<p class="${styles.message}">${message}</p>` : '';
 
     return `
       <div class="${styles.alert}">
         <div class="${styles['alert-container']}">
+          ${herlTemplate}
+          ${successTemplate}
           <div class="${styles.title}">${title}</div>
+          ${messageTemplate}
           <div class="${styles['button-container']}">
-            ${cancelButton}
+            ${cancelButtonTemplate}
             <button class="${styles.ok}" type="button" style="color: ${okColor}">${okMessage}</button>
           </div>
         </div>
@@ -33,7 +49,12 @@ export default class Alert extends UIComponent {
     if (!state.alert) {
       return;
     }
-    const { callback, cancelable } = state.alert;
+    const {
+      callback = () => {
+        //
+      },
+      cancelable,
+    } = state.alert;
 
     if (cancelable) {
       const cancelBtn = parent.querySelector(`.${styles.cancel}`);

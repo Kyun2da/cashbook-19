@@ -6,4 +6,10 @@ interface NewCashRecordRequest {
   date: string;
 }
 
-type RequestType = NewCashRecordRequest;
+interface NewCategoryRequest {
+  type: 'income' | 'expenditure';
+  name: string;
+  color: string;
+}
+
+type RequestType = NewCashRecordRequest | NewCategoryRequest;

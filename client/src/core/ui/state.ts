@@ -29,11 +29,12 @@ class State extends Subject {
       loading: false,
       alert: null,
       calendar: {},
+      categoryModal: false,
       statPage: {},
     };
   }
 
-  update(data = {}): void {
+  update(data: UpdateStoreState = {}): void {
     const prevState = this.state;
     this.state = {
       ...this.state,

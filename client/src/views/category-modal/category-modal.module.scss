@@ -1,6 +1,6 @@
 @import '@/core/styles/color.scss';
 
-.alert {
+.category-modal {
   position: absolute;
   top: 0;
   left: 0;
@@ -16,7 +16,7 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.alert-container {
+.category-modal-container {
   width: fit-content;
   padding: 40px;
   background-color: $off-white;
@@ -27,22 +27,14 @@
   align-items: center;
 }
 
-.herl,
-.success {
-  margin-bottom: 1rem;
-  font-size: 10rem;
-  font-family: 'Do Hyeon', sans-serif;
-}
-
 .title {
   font-size: 1.2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 24px;
 }
 
-.message {
-  font-size: 0.9rem;
-  color: $grey1;
-  margin-bottom: 1rem;
+.input-container {
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .button-container {

@@ -13,7 +13,6 @@ router.use(jwtCheck);
 router.use('/auth', authRouter);
 router.use('/api/v1', apiV1Router);
 
-// TODO: request validation error handler
 router.use(handleApiError);
 
 export default router;

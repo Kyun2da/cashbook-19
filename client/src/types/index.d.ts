@@ -48,7 +48,10 @@ interface CalendarState {
 }
 
 interface AlertState {
+  error?: boolean;
+  success?: boolean;
   title?: string;
+  message?: string;
   okMessage?: string;
   okColor?: string;
   callback?: (ok: boolean) => void;
@@ -73,7 +76,7 @@ type StoreStateValue =
   | CalendarState
   | StatPageState;
 
-interface StoreState extends Record<string, StoreStateValue> {
+interface StoreState {
   router: RouterState;
   user?: User;
   categories: Category[];
@@ -84,8 +87,11 @@ interface StoreState extends Record<string, StoreStateValue> {
   calendar: CalendarState;
   loading: boolean;
   alert?: AlertState;
+  categoryModal: boolean;
   statPage: StatPageState;
 }
+
+type UpdateStoreState = Partial<StoreState>;
 
 interface DonutRecord {
   id: string;

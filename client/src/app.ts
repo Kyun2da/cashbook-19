@@ -21,6 +21,7 @@ import DateObserver from '@/observers/date';
 
 import { getRecords, init } from './core/utils/api';
 import Alert from './views/alert';
+import CategoryModal from './views/category-modal';
 
 dayjs.locale('ko');
 
@@ -36,6 +37,7 @@ const pieChart = new PieChart(router, store);
 const statList = new StatList(null, store);
 const loading = new Loading(null, store);
 const alert = new Alert(null, store);
+const categoryModal = new CategoryModal(null, store);
 
 store.subscribe(header);
 store.subscribe(form);
@@ -46,6 +48,7 @@ store.subscribe(pieChart);
 store.subscribe(statList);
 store.subscribe(loading);
 store.subscribe(alert);
+store.subscribe(categoryModal);
 
 const dateObserver = new DateObserver(store);
 store.subscribe(dateObserver);

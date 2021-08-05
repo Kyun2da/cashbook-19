@@ -2,8 +2,9 @@ import State from '@/core/ui/state';
 import Router from '@/core/utils/router';
 
 import UIComponent from '@/core/ui/ui-component';
-import { enrollRecord } from '@/core/utils/api';
+import { deleteCategory, enrollRecord } from '@/core/utils/api';
 
+import colors from '@/core/styles/color.module.scss';
 import styles from './form.module.scss';
 
 export default class From extends UIComponent {
@@ -76,9 +77,8 @@ export default class From extends UIComponent {
               ${categoriesSelector}
               <div class="${styles['context-container']}" value="add">
                 <div>
-                  <div>추가하기</div>
+                  <div class="value">추가하기</div>
                 </div>
-                <i class="wci-close"></i>
               </div>
             </div>
           </div>
@@ -178,13 +178,50 @@ export default class From extends UIComponent {
     const parent = this.targetElement;
     const categorySelector = parent.querySelector(`.${styles['category-selector']}`);
     const categoryContext = parent.querySelector(`.${styles['category-context']}`);
+    const categoryContainer = target.closest(`.${styles['context-container']}`).querySelector('.value') as HTMLElement;
+    const categoryInput = categorySelector.firstElementChild as HTMLInputElement;
+
     if (target.classList.contains('wci-close')) {
-      console.log('삭제');
+      if (!this.store.get().user) {
+        e.preventDefault();
+        this.store.update({
+          alert: {
+            error: true,
+            title: '에러 발생',
+            message: '로그인이 필요합니다!',
+          },
+        });
+      } else {
+        this.store.update({
+          alert: {
+            title: `정말 ${categoryContainer.textContent} 카테고리를 삭제하시겠습니까?`,
+            okMessage: '삭제',
+            okColor: colors.error,
+            callback: async (ok: boolean) => {
+              if (ok) {
+                await deleteCategory(this.store, categoryContainer.dataset.value);
+              }
+            },
+            cancelable: true,
+          },
+        });
+      }
+    } else if (categoryContainer.textContent === '추가하기') {
+      if (!this.store.get().user) {
+        e.preventDefault();
+        this.store.update({
+          alert: {
+            error: true,
+            title: '에러 발생',
+            message: '로그인이 필요합니다!',
+          },
+        });
+      } else {
+        this.store.update({
+          categoryModal: true,
+        });
+      }
     } else {
-      const categoryContainer = target
-        .closest(`.${styles['context-container']}`)
-        .querySelector('.value') as HTMLElement;
-      const categoryInput = categorySelector.firstElementChild as HTMLInputElement;
       categoryInput.value = categoryContainer.textContent;
       categoryInput.setAttribute('data-value', categoryContainer.dataset.value);
       categoryContext.classList.toggle(styles.active);

@@ -23,7 +23,12 @@ const api = {
       body: JSON.stringify(data),
     }),
   put: () => {},
-  delete: () => {},
+  delete: (target: string) =>
+    fetch(`${process.env.BASE_URL}${target}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      redirect: 'manual',
+    }),
 };
 
 export const init = async (store: State): Promise<InitResponse | void> => {
@@ -113,6 +118,74 @@ export const enrollRecord = async (store: State, data: NewCashRecordRequest): Pr
   } catch (e) {
     // 어쩌징 ㅎㅎ
     // 적절한 alert를 호출??
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const enrollCategory = async (store: State, data: NewCategoryRequest): Promise<Category | void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.post('/api/v1/category', data);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    const { categories } = store.get();
+    const newCategory = (await response.json()) as Category;
+    store.update({
+      alert: {
+        success: true,
+        title: '등록 성공',
+        message: '성공적으로 등록을 완료하였습니다.',
+      },
+      categoryModal: null,
+      categories: [...categories, newCategory],
+    });
+  } catch (e) {
+    if (e instanceof ResponseError) {
+      const { message } = (await e.response.json()).errors;
+      store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message,
+        },
+        categoryModal: null,
+      });
+    }
+  } finally {
+    store.update({ loading: false });
+  }
+};
+
+export const deleteCategory = async (store: State, categoryId: string): Promise<void> => {
+  store.update({ loading: true });
+  try {
+    const response = await api.delete(`/api/v1/category/${categoryId}`);
+    if (!response.ok) {
+      throw new ResponseError(response);
+    }
+
+    store.update({
+      alert: {
+        success: true,
+        title: '삭제 성공',
+        message: '성공적으로 삭제를 완료하였습니다.',
+      },
+      categories: store.get().categories.filter((c) => c.id !== categoryId),
+    });
+  } catch (e) {
+    if (e instanceof ResponseError) {
+      const { message } = (await e.response.json()).errors;
+      store.update({
+        alert: {
+          error: true,
+          title: '에러 발생',
+          message,
+        },
+      });
+    }
   } finally {
     store.update({ loading: false });
   }

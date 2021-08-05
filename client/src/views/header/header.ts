@@ -14,6 +14,7 @@ import styles from './header.module.scss';
 export default class Header extends UIComponent {
   constructor(router: Router, store: State) {
     super(router, store);
+    this.handleClickLogin = this.handleClickLogin.bind(this);
     this.handleContextClick = this.handleContextClick.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleDateClick = this.handleDateClick.bind(this);
@@ -96,7 +97,15 @@ export default class Header extends UIComponent {
       parent.querySelector(`.${styles.context}`).addEventListener('click', this.handleContextClick);
       window.removeEventListener('click', this.handleToggleContext);
       window.addEventListener('click', this.handleToggleContext);
+    } else {
+      parent.querySelector(`a.${styles.user}`).addEventListener('click', this.handleClickLogin);
     }
+  }
+
+  handleClickLogin(): void {
+    this.store.update({
+      loading: true,
+    });
   }
 
   handleToggleContext(e: Event): void {

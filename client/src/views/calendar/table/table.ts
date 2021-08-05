@@ -79,13 +79,17 @@ export default class Table extends UIComponent {
   }
 
   template(state: StoreState): string {
-    const { records, date } = state;
+    const {
+      records,
+      date: { year, month },
+    } = state;
     const { selection } = state.calendar;
     const totalSum = cashRecordValueSum(records);
     const groupByDate = groupingCashRecordsByDate(records);
-    const dayNum = new Date(date.year, date.month, 0).getDate();
-    const frontBlankNum = new Date(date.year, date.month, 1).getDay();
-    const backBlankNum = 6 - new Date(date.year, date.month, dayNum).getDay();
+    const date = dayjs(`${year}-${month}`, 'YYYY-M');
+    const dayNum = date.daysInMonth();
+    const frontBlankNum = date.startOf('month').day();
+    const backBlankNum = 6 - date.endOf('month').day();
 
     return `
       <div class="${styles.week}">
@@ -99,7 +103,7 @@ export default class Table extends UIComponent {
       </div>
       <div class="${styles.calendar}">
         ${this.blankTemplate(frontBlankNum)}
-        ${this.cellTemplates(date.year, date.month, dayNum, groupByDate, selection)}
+        ${this.cellTemplates(year, month, dayNum, groupByDate, selection)}
         ${this.blankTemplate(backBlankNum)}
       </div>
       <div class="${styles.summary}">
