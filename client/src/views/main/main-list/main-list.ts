@@ -76,14 +76,16 @@ export default class MainList extends UIComponent {
     const target = e.target as HTMLElement;
 
     const filter = target.closest<HTMLElement>(`.${styles.filter}`);
-    const { type } = filter.dataset;
+    if (filter) {
+      const { type } = filter.dataset;
 
-    const { main } = this.store.get();
-    this.store.update({
-      main: {
-        ...main,
-        [type]: !main[type],
-      },
-    });
+      const { main } = this.store.get();
+      this.store.update({
+        main: {
+          ...main,
+          [type]: !main[type],
+        },
+      });
+    }
   }
 }
