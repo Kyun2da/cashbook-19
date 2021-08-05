@@ -43,6 +43,7 @@ module.exports = merge(common, {
         env: '(개발용)',
       },
       hash: true,
+      favicon: 'src/assets/images/cashbook-19.png',
     }),
   ],
 });
